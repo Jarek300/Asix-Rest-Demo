@@ -1,0 +1,19 @@
+﻿@model WebApplication.Pages.Variable.VariableModel
+
+
+<div class="card bg-light shadow-sm" style="width: 18rem;">
+
+    @if (!string.IsNullOrEmpty(Model.mReadError))
+    {
+        <div class="card-header bg-danger text-white"><h5>Błąd odczytu</h5> @Model.mReadError</div>
+    }
+
+    <div class="card-body">
+        <p>@Model.mDecription</p>
+        <h3>@Model.mValueFormatted @Model.mUnit</h3>
+    </div>
+
+    <div class="card-footer py-0 text-right">
+        <small class="text-muted">@Model.mName</small>
+    </div>
+</div>

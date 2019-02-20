@@ -1,0 +1,22 @@
+﻿@model WebApplication.Pages.VariableDynamic.VariableModel
+
+
+@if (!string.IsNullOrEmpty(Model.mReadError))
+{
+    <div class="card text-white bg-danger mb-3">
+        <div class="card-header"><h5>Błąd odczytu</h5></div>
+        <div class="card-body">
+            <p class="card-text">@Model.mReadError</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card bg-light shadow-sm " style="width: 18rem;">
+        <div class="card-body">
+            <p>Przepływ gazu do pieca</p>
+            <h3>@Model.mValueFormatted m<sup>3</sup>/h</h3>
+        </div>
+    </div>
+}
+

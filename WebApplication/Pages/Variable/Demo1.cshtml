@@ -1,0 +1,39 @@
+﻿@page
+@model WebApplication.Pages.Variable.Demo1Model
+@{
+    ViewData["Title"] = "Variable/Demo1";
+}
+
+
+<div class="jumbotron bg-light shadow-sm">
+    <h1 class="display-4">Odczyt wartości zmiennej</h1>
+
+    @if (!string.IsNullOrEmpty(Model.mReadError))
+    {
+        <hr class="my-4">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-header"><h5>Błąd odczytu</h5></div>
+            <div class="card-body">
+                <p class="card-text">@Model.mReadError</p>
+            </div>
+        </div>
+    }
+
+    <hr class="my-4">
+
+    <a id="btnRefresh" class="btn btn-secondary" asp-area="" asp-page="Variable/Demo1">Odśwież stronę</a>
+    <script> document.getElementById("btnRefresh").focus(); </script>
+</div>
+
+
+@if (string.IsNullOrEmpty(Model.mReadError))
+{
+    <div class="card bg-light shadow-sm " style="width: 18rem;">
+        <div class="card-body">
+            <p>Przepływ gazu do pieca</p>
+            <h3>@Model.mValueFormatted m<sup>3</sup>/h</h3>
+        </div>
+    </div>
+}
+
+
