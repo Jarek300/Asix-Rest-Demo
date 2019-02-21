@@ -1,5 +1,24 @@
 ﻿@model WebApplication.Pages.Variable.Demo3VariableModel
 
+@functions {
+    string ValueLimitToStyle(ValueLimit aValueLimit)
+    {
+        switch (aValueLimit)
+        {
+            case ValueLimit.HiHi:
+            case ValueLimit.LoLo:
+                return "background-color:red; ";
+
+            case ValueLimit.Hi:
+            case ValueLimit.Lo:
+                return "background-color:yellow;";
+
+            default:
+                return "";
+        }
+    }
+}
+
 
 <div class="card bg-light shadow-sm" style="width: 18rem;">
 
@@ -8,32 +27,56 @@
         <div class="card-header bg-danger text-white"><h5>Błąd odczytu</h5> @Model.mReadError</div>
     }
 
-        <div class="card-body">
-            <p>@Model.mDecription</p>
+    <div class="card-body">
+        <p>@Model.mDecription</p>
 
-            <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between">
 
-                <h3>@Model.mValueFormatted @Model.mUnit</h3>
-
-
-                @if (Model.mValueTrend == ValueTrend.Up)
+            <h3>
+                @if (Model.mValueQuality == ValueQuality.Good || Model.mValueQuality == ValueQuality.Uncertain)
                 {
-                    <i class="fas fa-caret-up fa-2x" data-fa-transform="grow-32 left-6 up-3" style="color:green"></i>
-                }
-                else if (Model.mValueTrend == ValueTrend.Down)
-                {
-                    <i class="fas fa-caret-down fa-2x" data-fa-transform="grow-32 left-6 up-3" style="color:red"></i>
-                }
-                else
-                {
-                    <i class="fas fa-minus fa-2x" data-fa-transform="grow-26 left-6 up-0" style="color:blue"></i>
+                    <span style="@ValueLimitToStyle(Model.mValueLimit)"> @Model.mValueFormatted </span>
                 }
 
-            </div>
+                @if (Model.mValueQuality == ValueQuality.Uncertain)
+                {
+                    @:?
+                }
+
+                @if (Model.mValueQuality == ValueQuality.Bad)
+                {
+                    @:??
+                }
+
+                @if (Model.mValueQuality == ValueQuality.Good || Model.mValueQuality == ValueQuality.Uncertain)
+                {
+                    @Model.mUnit
+                }
+            </h3>
+
+
+            @if (Model.mValueTrend == ValueTrend.Up)
+            {
+                <i class="fas fa-caret-up fa-2x" data-fa-transform="grow-32 left-6 up-3" style="color:green"></i>
+            }
+            else if (Model.mValueTrend == ValueTrend.Down)
+            {
+                <i class="fas fa-caret-down fa-2x" data-fa-transform="grow-32 left-6 up-3" style="color:red"></i>
+            }
+            else if (Model.mValueTrend == ValueTrend.NoChange)
+            {
+                <i class="fas fa-minus fa-2x" data-fa-transform="grow-26 left-6 up-0" style="color:blue"></i>
+            }
+            else
+            {
+                // ValueTrend.NotAvailable - nic nie wyświetlamy
+            }
 
         </div>
 
+    </div>
+
     <div class="card-footer py-0 text-right">
-        <small class="text-muted">@Model.mName @Model.mAverageValueFormatted (avg)</small>
+        <small class="text-muted">@Model.mName @Model.mValueLimit</small>
     </div>
 </div>
