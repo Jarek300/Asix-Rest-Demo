@@ -32,9 +32,9 @@ namespace WebApplication.Pages.VariableDynamic
         public VariableModel mVariableModelA004 = new VariableModel("A004", "Temperatura kwasu siarkowego", "°C");
         public VariableModel mVariableModelA008 = new VariableModel("A008", "Temperatura wody ciepłej", "°C");
 
-        public VariableModel mVariableModelA082 = new VariableModel("A082", "Przepływ kwasu siarkowego", "m3/h");
+        public VariableModel mVariableModelA082 = new VariableModel("A082", "Przepływ kwasu siarkowego", "m³/h");
         public VariableModel mVariableModelA084 = new VariableModel("A084", "Poziom w zb. cyrkulacyjnym kwasu", "%");
-        public VariableModel mVariableModelA086 = new VariableModel("A086", "Przepływ wody chłodzącej", "m3/h");
+        public VariableModel mVariableModelA086 = new VariableModel("A086", "Przepływ wody chłodzącej", "m³/h");
 
         public Demo1Model()
         {
@@ -84,47 +84,19 @@ namespace WebApplication.Pages.VariableDynamic
 
 
 
-
-        class VariableState
-        {
-            public string id;
-            public bool readSucceeded;
-            public string readStatusString;
-            public DateTime timeStamp;
-            public uint quality;
-            public object value;
-        };
-
-
-
         void ReadVariableValue(VariableModel aVariableModel)
         {
             try
             {
-                HttpClient httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri("http://asport.askom.com.pl");
-
-                String uri = "/asix/v1/variable/value";
-                uri = QueryHelpers.AddQueryString(uri, "name", aVariableModel.mName);
-
-
-                HttpResponseMessage response = httpClient.GetAsync(uri).Result;
-                if (!response.IsSuccessStatusCode)
-                {
-                    aVariableModel.mReadError = "Błąd http: " + response.StatusCode.ToString();
-                    return;
-                }             
-
-
-                List<VariableState> variableStateList = response.Content.ReadAsAsync<List<VariableState>>().Result;
-                VariableState variableState = variableStateList[0];
-
+                AsixRestClient asixRestClient = new AsixRestClient();
+                VariableState variableState = asixRestClient.ReadVariableState(aVariableModel.mName);
 
                 if (!variableState.readSucceeded)
                 {
                     aVariableModel.mReadError = variableState.readStatusString;
                     return;
                 }
+
 
                 aVariableModel.mDateTime = variableState.timeStamp;
 

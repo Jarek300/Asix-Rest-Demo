@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 
@@ -24,35 +22,10 @@ namespace WebApplication.Pages.Variable
         }
 
 
-        class VariableState
-        {
-            public string id;
-            public bool readSucceeded;
-            public string readStatusString;
-            public DateTime timeStamp;
-            public uint quality;
-            public object value;
-        };
-
-
-
         void ReadVariableValue()
         {
-            HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("http://asport.askom.com.pl");
-
-
-            HttpResponseMessage response = httpClient.GetAsync("/asix/v1/variable/value?name=A110").Result;
-            if (!response.IsSuccessStatusCode)
-            {
-                mReadError = "Błąd http: " + response.StatusCode.ToString();
-                return;
-            }             
-
-
-            List<VariableState> variableStateList = response.Content.ReadAsAsync<List<VariableState>>().Result;
-            VariableState variableState = variableStateList[0];
-
+            AsixRestClient asixRestClient = new AsixRestClient();
+            VariableState variableState = asixRestClient.ReadVariableState("A110");
 
             if (!variableState.readSucceeded)
             {
