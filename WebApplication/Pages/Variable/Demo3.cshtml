@@ -1,0 +1,28 @@
+﻿@page
+@model WebApplication.Pages.Variable.Demo3Model
+@{
+    ViewData["Title"] = "Variable/Demo2";
+}
+
+
+<div class="jumbotron bg-light shadow-sm">
+    <h1 class="display-4">Odczyt wartości zmiennych</h1>
+
+    <hr class="my-4">
+
+    <a id="btnRefresh" class="btn btn-secondary" asp-area="" asp-page="Variable/Demo3">Odśwież stronę</a>
+    <script>document.getElementById("btnRefresh").focus();</script>
+</div>
+
+
+<div class="card-deck py-3">
+    <partial name="_Demo3Variable" model="Model.mVariableModelA000" />
+    <partial name="_Demo3Variable" model="Model.mVariableModelA004" />
+    <partial name="_Demo3Variable" model="Model.mVariableModelA008" />
+</div>
+
+<div class="card-deck py-3">
+    <partial name="_Demo3Variable" model="Model.mVariableModelA082" />
+    <partial name="_Demo3Variable" model="Model.mVariableModelA084" />
+    <partial name="_Demo3Variable" model="Model.mVariableModelA086" />
+</div>

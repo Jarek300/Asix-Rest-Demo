@@ -35,6 +35,24 @@ namespace WebApplication
         public DateTime timeStamp = DateTime.UtcNow;
         public uint quality = 0;
         public object value = null;
+
+
+        public bool IsQualityGood()
+        {
+            return (quality & 0xC0) == 0xC0;
+        }
+
+
+        public bool IsQualityUncertain()
+        {
+            return (quality & 0xC0) == 0x40;
+        }
+
+
+        public bool IsQualityBad()
+        {
+            return (quality & 0xC0) == 0;
+        }
     };
 
 
@@ -159,5 +177,48 @@ namespace WebApplication
                 return variableState;
             }
         }
+
+
+
+        public VariableState ReadVariableAggregate(string aVariableName, string aAggregate, string aPeriodLength, string aRefershInterval = "60s")
+        {
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.BaseAddress = new Uri(mServerBaseAddress);
+
+                String uri = "/asix/v1/variable/aggregate";
+                uri = QueryHelpers.AddQueryString(uri, "name", aVariableName);
+                uri = QueryHelpers.AddQueryString(uri, "aggregate", aAggregate);
+                uri = QueryHelpers.AddQueryString(uri, "periodLength", aPeriodLength);
+                uri = QueryHelpers.AddQueryString(uri, "refershInterval", aRefershInterval);
+
+
+
+                HttpResponseMessage response = httpClient.GetAsync(uri).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    VariableState variableState = new VariableState();
+                    variableState.id = aVariableName;
+                    variableState.readSucceeded = false;
+                    variableState.readStatusString = "Błąd http: " + response.StatusCode.ToString();
+                    return variableState;
+                }             
+
+
+                List<VariableState> variableStateList = response.Content.ReadAsAsync<List<VariableState>>().Result;
+                return variableStateList[0];
+            }
+            catch (Exception e)
+            {
+                VariableState variableState = new VariableState();
+                variableState.id = aVariableName;
+                variableState.readSucceeded = false;
+                variableState.readStatusString = "Błąd: " + e.Message;
+                return variableState;
+            }
+        }
+
+
     }
 }

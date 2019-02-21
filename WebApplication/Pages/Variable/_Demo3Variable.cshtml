@@ -1,0 +1,39 @@
+﻿@model WebApplication.Pages.Variable.Demo3VariableModel
+
+
+<div class="card bg-light shadow-sm" style="width: 18rem;">
+
+    @if (!string.IsNullOrEmpty(Model.mReadError))
+    {
+        <div class="card-header bg-danger text-white"><h5>Błąd odczytu</h5> @Model.mReadError</div>
+    }
+
+        <div class="card-body">
+            <p>@Model.mDecription</p>
+
+            <div class="d-flex justify-content-between">
+
+                <h3>@Model.mValueFormatted @Model.mUnit</h3>
+
+
+                @if (Model.mValueTrend == ValueTrend.Up)
+                {
+                    <i class="fas fa-caret-up fa-2x" data-fa-transform="grow-32 left-6 up-3" style="color:green"></i>
+                }
+                else if (Model.mValueTrend == ValueTrend.Down)
+                {
+                    <i class="fas fa-caret-down fa-2x" data-fa-transform="grow-32 left-6 up-3" style="color:red"></i>
+                }
+                else
+                {
+                    <i class="fas fa-minus fa-2x" data-fa-transform="grow-26 left-6 up-0" style="color:blue"></i>
+                }
+
+            </div>
+
+        </div>
+
+    <div class="card-footer py-0 text-right">
+        <small class="text-muted">@Model.mName @Model.mAverageValueFormatted (avg)</small>
+    </div>
+</div>

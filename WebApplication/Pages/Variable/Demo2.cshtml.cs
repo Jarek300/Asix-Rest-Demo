@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebApplication.Pages.Variable
 {
-    public class VariableModel
+    public class Demo2VariableModel
     {
-        public VariableModel(string aName, string aDecription, string aUnit)
+        public Demo2VariableModel(string aName, string aDecription, string aUnit)
         {
             mName = aName;
             mDecription = aDecription;
@@ -20,13 +20,13 @@ namespace WebApplication.Pages.Variable
 
     public class Demo2Model : PageModel
     {
-        public VariableModel mVariableModelA000 = new VariableModel("A000", "Temperatura spalin przed odemglaczem", "°C");
-        public VariableModel mVariableModelA004 = new VariableModel("A004", "Temperatura kwasu siarkowego", "°C");
-        public VariableModel mVariableModelA008 = new VariableModel("A008", "Temperatura wody ciepłej", "°C");
+        public Demo2VariableModel mVariableModelA000 = new Demo2VariableModel("A000", "Temperatura spalin przed odemglaczem", "°C");
+        public Demo2VariableModel mVariableModelA004 = new Demo2VariableModel("A004", "Temperatura kwasu siarkowego", "°C");
+        public Demo2VariableModel mVariableModelA008 = new Demo2VariableModel("A008", "Temperatura wody ciepłej", "°C");
 
-        public VariableModel mVariableModelA082 = new VariableModel("A082", "Przepływ kwasu siarkowego", "m³/h");
-        public VariableModel mVariableModelA084 = new VariableModel("A084", "Poziom w zb. cyrkulacyjnym kwasu", "%");
-        public VariableModel mVariableModelA086 = new VariableModel("A086", "Przepływ wody chłodzącej", "m³/h");
+        public Demo2VariableModel mVariableModelA082 = new Demo2VariableModel("A082", "Przepływ kwasu siarkowego", "m³/h");
+        public Demo2VariableModel mVariableModelA084 = new Demo2VariableModel("A084", "Poziom w zb. cyrkulacyjnym kwasu", "%");
+        public Demo2VariableModel mVariableModelA086 = new Demo2VariableModel("A086", "Przepływ wody chłodzącej", "m³/h");
 
 
         public void OnGet()
@@ -42,7 +42,7 @@ namespace WebApplication.Pages.Variable
 
 
 
-        void ReadVariableValue(VariableModel aVariableModel)
+        void ReadVariableValue(Demo2VariableModel aVariableModel)
         {
             try
             {
