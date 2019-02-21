@@ -20,6 +20,8 @@ namespace WebApplication.Pages.VariableDynamic
         public string mName, mDecription, mUnit;
         public string mValueFormatted = "?", mReadError;
         public DateTime mDateTime;
+
+        public bool mAjax = false;
     }
 
 
@@ -57,7 +59,7 @@ namespace WebApplication.Pages.VariableDynamic
 
 
 
-        public PartialViewResult OnGetVar1(string name)
+        public PartialViewResult OnGetVariableCard(string name)
         {
             mVariableModelDict.TryGetValue(name, out VariableModel variableModel);
             if (variableModel != null)
@@ -71,6 +73,8 @@ namespace WebApplication.Pages.VariableDynamic
             }
 
             //return Partial("_Demo1Variable", mVariableModelA000);
+
+            variableModel.mAjax = true;
 
             return new PartialViewResult {
                 ViewName = "_Demo1Variable",

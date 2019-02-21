@@ -9,33 +9,33 @@
     <h1 class="display-4">Odświeżanie wartości zmiennych</h1>
 </div>
 
+
 <div class="card-deck py-3">
-    <div id="viewA000"></div>
-    <div id="viewA004"></div>
-    <div id="viewA008"></div>
+    <partial name="_Demo1Variable" model="@Model.mVariableModelA000" />
+    <partial name="_Demo1Variable" model="@Model.mVariableModelA004" />
+    <partial name="_Demo1Variable" model="@Model.mVariableModelA008" />
 </div>
 
 <div class="card-deck py-3">
-    <div id="viewA082"></div>
-    <div id="viewA084"></div>
-    <div id="viewA086"></div>
+    <partial name="_Demo1Variable" model="@Model.mVariableModelA082" />
+    <partial name="_Demo1Variable" model="@Model.mVariableModelA084" />
+    <partial name="_Demo1Variable" model="@Model.mVariableModelA086" />
 </div>
 
 
 @section scripts{
     <script>
         setInterval(refreshVariables, 2000);
-        refreshVariables();
 
         function refreshVariables()
         {
-            $('#viewA000').load('/VariableDynamic/Demo1?handler=Var1&name=A000');
-            $('#viewA004').load('/VariableDynamic/Demo1?handler=Var1&name=A004');
-            $('#viewA008').load('/VariableDynamic/Demo1?handler=Var1&name=A008');
+            $('#A000').load('/VariableDynamic/Demo1?handler=VariableCard&name=A000');
+            $('#A004').load('/VariableDynamic/Demo1?handler=VariableCard&name=A004');
+            $('#A008').load('/VariableDynamic/Demo1?handler=VariableCard&name=A008');
 
-            $('#viewA082').load('/VariableDynamic/Demo1?handler=Var1&name=A082');
-            $('#viewA084').load('/VariableDynamic/Demo1?handler=Var1&name=A084');
-            $('#viewA086').load('/VariableDynamic/Demo1?handler=Var1&name=A086');
+            $('#A082').load('/VariableDynamic/Demo1?handler=VariableCard&name=A082');
+            $('#A084').load('/VariableDynamic/Demo1?handler=VariableCard&name=A084');
+            $('#A086').load('/VariableDynamic/Demo1?handler=VariableCard&name=A086');
         }
     </script>
 }
