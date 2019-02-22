@@ -56,6 +56,49 @@ namespace WebApplication
     };
 
 
+
+    public class VariableAggregateSample
+    {
+        public DateTime t; // – początek interwału, dla którego wyliczono wartość agregatu,
+        public DateTime e; // – koniec interwału, dla którego wyliczono wartość agregatu,
+        public uint q;     // – jakość próbki,
+        public double v;   // – wartość próbki; wartość jest zawsze typu liczbowego.
+
+        public bool IsQualityGood()
+        {
+            return (q & 0xC0) == 0xC0;
+        }
+
+
+        public bool IsQualityUncertain()
+        {
+            return (q & 0xC0) == 0x40;
+        }
+
+
+        public bool IsQualityBad()
+        {
+            return (q & 0xC0) == 0;
+        }
+
+    };
+
+
+    public class VariableAggregateArchive
+    {
+        public string id;  // – nazwa zmiennej i nazwa agregatu oddzielone ukośnikiem,
+
+        public bool readSucceeded; // – wynik odczytu wartości historycznych zmiennej – wartość typu bool,
+        public string readStatusString; // – tekstowy opis błędu odczytu,
+
+        public DateTime periodStartTime; // – początek okresu, dla którego pobrano dane,
+        public DateTime periodEndTime; // – koniec okresu, dla którego pobrano dane,
+
+        public VariableAggregateSample[] samples; // – tablica obiektów wartości archiwalnych.
+    };
+
+
+
     public class AsixRestClient
     {
         const string mServerBaseAddress = "http://asport.askom.com.pl";
@@ -219,6 +262,50 @@ namespace WebApplication
             }
         }
 
+
+
+        public VariableAggregateArchive ReadVariableAggregateArchive(string aVariableName, string aAggregate, 
+            string aPeriodStartOpc, string aPeriodLengthOpc, string aResampleIntervalOpc, string aArchiveType = "")
+        {
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.BaseAddress = new Uri(mServerBaseAddress);
+                // ?name=A000&aggregate=Average&periodStart=DAY&periodLength=1D&resampleInterval=1H
+
+                String uri = "/asix/v1/variable/archive/processed";
+                uri = QueryHelpers.AddQueryString(uri, "name", aVariableName);
+                uri = QueryHelpers.AddQueryString(uri, "aggregate", aAggregate);
+                uri = QueryHelpers.AddQueryString(uri, "periodStart", aPeriodStartOpc);
+                uri = QueryHelpers.AddQueryString(uri, "periodLength", aPeriodLengthOpc);
+                uri = QueryHelpers.AddQueryString(uri, "resampleInterval", aResampleIntervalOpc);
+                if (!string.IsNullOrEmpty(aArchiveType))
+                    uri = QueryHelpers.AddQueryString(uri, "archiveType", aArchiveType);
+
+
+
+                HttpResponseMessage response = httpClient.GetAsync(uri).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    VariableAggregateArchive variableAggregateArchive = new VariableAggregateArchive();
+                    variableAggregateArchive.id = aVariableName + "/" + aAggregate;
+                    variableAggregateArchive.readSucceeded = false;
+                    variableAggregateArchive.readStatusString = "Błąd http: " + response.StatusCode.ToString();
+                    return variableAggregateArchive;
+                }             
+
+
+                return response.Content.ReadAsAsync<VariableAggregateArchive>().Result;
+            }
+            catch (Exception e)
+            {
+                VariableAggregateArchive variableAggregateArchive = new VariableAggregateArchive();
+                variableAggregateArchive.id = aVariableName + "/" + aAggregate;
+                variableAggregateArchive.readSucceeded = false;
+                variableAggregateArchive.readStatusString = "Błąd: " + e.Message;
+                return variableAggregateArchive;
+            }
+        }
 
     }
 }
