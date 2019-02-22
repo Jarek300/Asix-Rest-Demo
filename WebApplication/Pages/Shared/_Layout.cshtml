@@ -34,24 +34,32 @@
                 </button>
                 <div class="navbar-collapse collapse d-lg-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Attribute/Demo1">Atrybut/Demo1</a>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Atrybut
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Attribute/Demo1">Demo1</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Attribute/Demo2">Demo2</a>
+                            </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Attribute/Demo2">Atrybut/Demo2</a>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Zmienna
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Variable/Demo1">Demo1</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Variable/Demo2">Demo2</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Variable/Demo3">Demo3</a>
+                            </div>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Variable/Demo1">Zmienna/Demo1</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/VariableDynamic/Demo1">Odświeżanie/Demo1</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Variable/Demo2">Zmienna/Demo2</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Variable/Demo3">Zmienna/Demo3</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/VariableDynamic/Demo1">Zmienna/Odświeżanie/Demo1</a>
-                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Archive/Demo1">Archiwum/Demo1</a>
                         </li>
