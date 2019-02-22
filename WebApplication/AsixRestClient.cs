@@ -57,6 +57,50 @@ namespace WebApplication
 
 
 
+    public class VariableRawSample
+    {
+        public DateTime t; // – początek interwału, dla którego wyliczono wartość agregatu,
+        public uint q;     // – jakość próbki,
+        public double v;   // – wartość próbki; wartość jest zawsze typu liczbowego.
+
+        public bool IsQualityGood()
+        {
+            return (q & 0xC0) == 0xC0;
+        }
+
+
+        public bool IsQualityUncertain()
+        {
+            return (q & 0xC0) == 0x40;
+        }
+
+
+        public bool IsQualityBad()
+        {
+            return (q & 0xC0) == 0;
+        }
+    };
+
+
+
+    public class VariableRawArchive
+    {
+        public string id;  // – nazwa zmiennej i nazwa agregatu oddzielone ukośnikiem,
+
+        public bool readSucceeded; // – wynik odczytu wartości historycznych zmiennej – wartość typu bool,
+        public string readStatusString; // – tekstowy opis błędu odczytu,
+
+        public bool moreDataAvailable;  // w podanym okresie znajduje się więcej próbek niż podano w parametrze maxNumberOfSamples,
+        public DateTime periodStartTime; // – początek okresu, dla którego pobrano dane,
+        public DateTime periodEndTime; // – koniec okresu, dla którego pobrano dane,
+
+        public VariableRawSample[] samples; // – tablica obiektów wartości 
+    };
+
+
+
+
+
     public class VariableAggregateSample
     {
         public DateTime t; // – początek interwału, dla którego wyliczono wartość agregatu,
@@ -259,6 +303,49 @@ namespace WebApplication
                 variableState.readSucceeded = false;
                 variableState.readStatusString = "Błąd: " + e.Message;
                 return variableState;
+            }
+        }
+
+
+
+        public VariableRawArchive ReadVariableRawArchive(string aVariableName, string aPeriodStartOpc, string aPeriodLengthOpc, string aArchiveType = "", int aMaxNumberOfSamples = 0)
+        {
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.BaseAddress = new Uri(mServerBaseAddress);
+                // ?name=A000&aggregate=Average&periodStart=DAY&periodLength=1D&resampleInterval=1H
+
+                String uri = "/asix/v1/variable/archive/raw";
+                uri = QueryHelpers.AddQueryString(uri, "name", aVariableName);
+                uri = QueryHelpers.AddQueryString(uri, "periodStart", aPeriodStartOpc);
+                uri = QueryHelpers.AddQueryString(uri, "periodLength", aPeriodLengthOpc);
+                if (!string.IsNullOrEmpty(aArchiveType))
+                    uri = QueryHelpers.AddQueryString(uri, "archiveType", aArchiveType);
+                if (aMaxNumberOfSamples > 0)
+                    uri = QueryHelpers.AddQueryString(uri, "maxNumberOfSamples", aMaxNumberOfSamples.ToString());
+                
+
+                HttpResponseMessage response = httpClient.GetAsync(uri).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    VariableRawArchive variableRawArchive = new VariableRawArchive();
+                    variableRawArchive.id = aVariableName;
+                    variableRawArchive.readSucceeded = false;
+                    variableRawArchive.readStatusString = "Błąd http: " + response.StatusCode.ToString();
+                    return variableRawArchive;
+                }             
+
+
+                return response.Content.ReadAsAsync<VariableRawArchive>().Result;
+            }
+            catch (Exception e)
+            {
+                VariableRawArchive variableRawArchive = new VariableRawArchive();
+                variableRawArchive.id = aVariableName;
+                variableRawArchive.readSucceeded = false;
+                variableRawArchive.readStatusString = "Błąd: " + e.Message;
+                return variableRawArchive;
             }
         }
 

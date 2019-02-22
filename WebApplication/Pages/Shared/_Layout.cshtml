@@ -60,9 +60,16 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/VariableDynamic/Demo1">Odświeżanie/Demo1</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Archive/Demo1">Archiwum/Demo1</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Archiwum
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Archive/Demo1">Demo1</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Archive/Demo2">Demo2</a>
+                            </div>
                         </li>
+
                     </ul>
                 </div>
             </div>
