@@ -143,6 +143,24 @@ namespace WebApplication
 
 
 
+    public class AlarmState
+    {
+        public string id;  // – identyfikator alarmu(domena i nazwa alarmu oddzielone ukośnikiem),
+
+        public bool readSucceeded; // – wynik odczytu stany alarmu – wartość typu bool,
+
+        public string readStatusString;    // – tekstowy opis błędu odczytu,
+
+        public bool active;    // – czy alarm jest aktualnie aktywny,
+
+        public string stateDescription;    // – opis stanu alarmu,
+
+        public bool ackAvailabe;   // – czy dostępna jest informacja o potwierdzeniu alarmu,
+        public bool ack;           // – czy alarm jest potwierdzony.
+    };
+
+
+
     public class AsixRestClient
     {
         const string mServerBaseAddress = "http://asport.askom.com.pl";
@@ -358,7 +376,6 @@ namespace WebApplication
             {
                 HttpClient httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri(mServerBaseAddress);
-                // ?name=A000&aggregate=Average&periodStart=DAY&periodLength=1D&resampleInterval=1H
 
                 String uri = "/asix/v1/variable/archive/processed";
                 uri = QueryHelpers.AddQueryString(uri, "name", aVariableName);
@@ -391,6 +408,43 @@ namespace WebApplication
                 variableAggregateArchive.readSucceeded = false;
                 variableAggregateArchive.readStatusString = "Błąd: " + e.Message;
                 return variableAggregateArchive;
+            }
+        }
+
+
+        public AlarmState ReadAlarmState(string aDomainName, string aAlarmName)
+        {
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.BaseAddress = new Uri(mServerBaseAddress);
+
+                String uri = "/asix/v1/alarm/state";
+                uri = QueryHelpers.AddQueryString(uri, "domain", aDomainName);
+                uri = QueryHelpers.AddQueryString(uri, "name", aAlarmName);
+
+
+
+                HttpResponseMessage response = httpClient.GetAsync(uri).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    AlarmState alarmState = new AlarmState();
+                    alarmState.id = aDomainName + "/" + aAlarmName;
+                    alarmState.readSucceeded = false;
+                    alarmState.readStatusString = "Błąd http: " + response.StatusCode.ToString();
+                    return alarmState;
+                }             
+
+                List<AlarmState> alarmStateList = response.Content.ReadAsAsync<List<AlarmState>>().Result;
+                return alarmStateList[0];
+            }
+            catch (Exception e)
+            {
+                AlarmState alarmState = new AlarmState();
+                alarmState.id = aDomainName + "/" + aAlarmName;
+                alarmState.readSucceeded = false;
+                alarmState.readStatusString = "Błąd: " + e.Message;
+                return alarmState;
             }
         }
 
