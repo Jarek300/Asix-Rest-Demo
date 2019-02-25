@@ -10,16 +10,8 @@
 </div>
 
 
-<div class="card-deck py-3">
-    <partial name="_Demo1Variable" model="@Model.mVariableModelA000" />
-    <partial name="_Demo1Variable" model="@Model.mVariableModelA004" />
-    <partial name="_Demo1Variable" model="@Model.mVariableModelA008" />
-</div>
-
-<div class="card-deck py-3">
-    <partial name="_Demo1Variable" model="@Model.mVariableModelA082" />
-    <partial name="_Demo1Variable" model="@Model.mVariableModelA084" />
-    <partial name="_Demo1Variable" model="@Model.mVariableModelA086" />
+<div id="deck">
+    <partial name="_Demo1VariableDeck" model="@Model.mVariableModelList.ToArray()" />
 </div>
 
 
@@ -27,15 +19,8 @@
     <script>
         setInterval(refreshVariables, 2000);
 
-        function refreshVariables()
-        {
-            $('#A000').load('Demo1?handler=VariableCard&name=A000');
-            $('#A004').load('Demo1?handler=VariableCard&name=A004');
-            $('#A008').load('Demo1?handler=VariableCard&name=A008');
-
-            $('#A082').load('Demo1?handler=VariableCard&name=A082');
-            $('#A084').load('Demo1?handler=VariableCard&name=A084');
-            $('#A086').load('Demo1?handler=VariableCard&name=A086');
+        function refreshVariables() {
+            $('#deck').load('Demo1?handler=VariableDeck');
         }
     </script>
 }

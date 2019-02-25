@@ -19,14 +19,12 @@ namespace WebApplication.Pages.VariableDynamic
         public string mName, mDecription, mUnit;
         public string mValueFormatted = "?", mReadError;
         public DateTime mDateTime;
-
-        public bool mAjax = false;
     }
 
 
     public class Demo1Model : PageModel
     {
-        public Dictionary<string, VariableModel> mVariableModelDict = new Dictionary<string, VariableModel>();
+        public List<VariableModel> mVariableModelList = new List<VariableModel>();
         public VariableModel mVariableModelA000 = new VariableModel("A000", "Temperatura spalin przed odemglaczem", "°C");
         public VariableModel mVariableModelA004 = new VariableModel("A004", "Temperatura kwasu siarkowego", "°C");
         public VariableModel mVariableModelA008 = new VariableModel("A008", "Temperatura wody ciepłej", "°C");
@@ -35,17 +33,40 @@ namespace WebApplication.Pages.VariableDynamic
         public VariableModel mVariableModelA084 = new VariableModel("A084", "Poziom w zb. cyrkulacyjnym kwasu", "%");
         public VariableModel mVariableModelA086 = new VariableModel("A086", "Przepływ wody chłodzącej", "m³/h");
 
+
+
         public Demo1Model()
         {
-            mVariableModelDict.Add(mVariableModelA000.mName, mVariableModelA000);
-            mVariableModelDict.Add(mVariableModelA004.mName, mVariableModelA004);
-            mVariableModelDict.Add(mVariableModelA008.mName, mVariableModelA008);
-            mVariableModelDict.Add(mVariableModelA082.mName, mVariableModelA082);
-            mVariableModelDict.Add(mVariableModelA084.mName, mVariableModelA084);
-            mVariableModelDict.Add(mVariableModelA086.mName, mVariableModelA086);
+            mVariableModelList.Add(mVariableModelA000);
+            mVariableModelList.Add(mVariableModelA004);
+            mVariableModelList.Add(mVariableModelA008);
+            mVariableModelList.Add(mVariableModelA082);
+            mVariableModelList.Add(mVariableModelA084);
+            mVariableModelList.Add(mVariableModelA086);
         }
 
+
+
         public void OnGet()
+        {
+            ReadVariableValues();
+        }
+
+
+
+        public PartialViewResult OnGetVariableDeck()
+        {
+            ReadVariableValues();
+
+            return new PartialViewResult {
+                ViewName = "_Demo1VariableDeck",
+                ViewData = new ViewDataDictionary<VariableModel[]>(ViewData, mVariableModelList.ToArray())
+            };
+        }
+
+
+
+        void ReadVariableValues()
         {
             ReadVariableValue(mVariableModelA000);
             ReadVariableValue(mVariableModelA004);
@@ -55,32 +76,6 @@ namespace WebApplication.Pages.VariableDynamic
             ReadVariableValue(mVariableModelA084);
             ReadVariableValue(mVariableModelA086);
         }
-
-
-
-        public PartialViewResult OnGetVariableCard(string name)
-        {
-            mVariableModelDict.TryGetValue(name, out VariableModel variableModel);
-            if (variableModel != null)
-            {
-                ReadVariableValue(variableModel);
-            }
-            else
-            {
-                variableModel = new VariableModel(name, "", "");
-                variableModel.mReadError = "Nieobsługiwana zmienna";
-            }
-
-            //return Partial("_Demo1Variable", mVariableModelA000);
-
-            variableModel.mAjax = true;
-
-            return new PartialViewResult {
-                ViewName = "_Demo1Variable",
-                ViewData = new ViewDataDictionary<VariableModel>(ViewData, variableModel)
-            };
-        }
-
 
 
         void ReadVariableValue(VariableModel aVariableModel)
