@@ -15,6 +15,7 @@ Zawartość projektu:
  * Archiwum/Demo2 - Odczyt wartości historycznych surowych jednej zmiennych i wyświetlenie w postaci wykresu
  * Alarm/Demo1 - Odczyt wartości bieżącej wielu alarmów
  * Alarm/Demo2 - Odczyt wartości historycznych z archiwum alarmów
+ * AsixRestClient.cs - Klasa pomocnicza realizująca odczyt danych z serwera REST.
 
 
 # Description
