@@ -4,6 +4,39 @@
     ViewData["Title"] = "Alarm/Demo1";
 }
 
-<h1>Demo1</h1>
 
-test
+<div class="jumbotron bg-light shadow-sm">
+    <h1 class="display-4">Odczyt wartości alarmu</h1>
+
+    <hr class="my-4">
+
+    <a id="btnRefresh" class="btn btn-secondary" asp-area="" asp-page="Alarm/Demo1">Odśwież stronę</a>
+    <script>document.getElementById("btnRefresh").focus();</script>
+</div>
+
+
+
+@{
+    const int colCount = 3;
+    int rowCount = (int)Math.Ceiling(1.0 * Model.mAlarmModelList.Count / colCount);
+}
+
+
+@for (int i = 0; i < rowCount; ++i)
+{
+    @:<div class="card-columns py-3">
+
+    for (int j = 0; j < colCount; ++j)
+    {
+        int index = i * colCount + j;
+
+        if (index < Model.mAlarmModelList.Count)
+        {
+            AlarmModel alarmModel = Model.mAlarmModelList[index];
+            <partial name="_Demo1Alarm" model=alarmModel />
+        }
+
+    }
+
+    @:</div>
+}
