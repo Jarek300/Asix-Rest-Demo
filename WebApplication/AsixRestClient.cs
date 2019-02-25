@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
+
+#pragma warning disable 0649
+
 
 namespace WebApplication
 {
-    public class ServerError
-    {
-        public string Message;
-    }
 
-
+    /// <summary>
+    /// Typ wyniku zwracanego przez funkcję ReadVariableAttributes
+    /// </summary>
     public class VariableAttributes
     {
         public string id = "";
@@ -208,28 +207,48 @@ namespace WebApplication
     }
 
 
+    /// <summary>
+    /// Klasa pośrednicząca w odczycie danych procesowych z serwera REST aplikacji Asix.Evo.
+    /// Zawiera wszystkie funkcją realizujące odczyt danych procesowych.
+    /// </summary>
     public class AsixRestClient
     {
-        const string mServerBaseAddress = "http://asport.askom.com.pl";
+        string mServerBaseAddress = "http://asport.askom.com.pl";
+        HttpClient httpClient = new HttpClient();
+
+        /// <summary>
+        /// Konstruktor klasy
+        /// </summary>
+        /// <param name="aServerBaseAddress">Adres komputera, na którym jest uruchomiony serwer REST. 
+        /// Jeśli parametr zostanie pominięty to użyty zostanie serwer demonstracyjny asport.askom.com.pl</param>
+        public AsixRestClient(string aServerBaseAddress = "")
+        {
+            if (!string.IsNullOrEmpty(aServerBaseAddress))
+                mServerBaseAddress = aServerBaseAddress;
+
+            httpClient.BaseAddress = new Uri(mServerBaseAddress);
+        }
 
 
+
+        /// <summary>
+        /// Funkcja czyta wartości atrybutów zmiennej.
+        /// </summary>
+        /// <param name="aVariableName">Nazwa zmiennej</param>
+        /// <param name="aAttributeNameList">Lista nazw atrybutów zmiennej</param>
+        /// <returns></returns>
         public VariableAttributes ReadVariableAttributes(string aVariableName, List<string> aAttributeNameList)
         {
-            VariableAttributes variableAttributes = new VariableAttributes();
-            variableAttributes.id = aVariableName;
-            variableAttributes.mAttributeNameList = aAttributeNameList;
-
-
-            HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(mServerBaseAddress);
-
-
             String uri = "/asix/v1/variable/attribute";
-
             uri = QueryHelpers.AddQueryString(uri, "name", aVariableName);
 
             foreach (var i in aAttributeNameList)
                 uri = QueryHelpers.AddQueryString(uri, "attribute", i);
+
+
+            VariableAttributes variableAttributes = new VariableAttributes();
+            variableAttributes.id = aVariableName;
+            variableAttributes.mAttributeNameList = aAttributeNameList;
 
 
             HttpResponseMessage response = httpClient.GetAsync(uri).Result;
@@ -266,10 +285,6 @@ namespace WebApplication
 
             try
             {
-                HttpClient httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri(mServerBaseAddress);
-
-
                 HttpResponseMessage response = httpClient.GetAsync("/asix/v1/server/variable/attribute").Result;
                 if (!response.IsSuccessStatusCode)
                 {
@@ -289,8 +304,6 @@ namespace WebApplication
                 serverAttributes.readStatusString = "Błąd: " + e.Message;
                 return serverAttributes;
             }
-            
-
         }
 
 
@@ -299,9 +312,6 @@ namespace WebApplication
         {
             try
             {
-                HttpClient httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri(mServerBaseAddress);
-
                 String uri = "/asix/v1/variable/value";
                 uri = QueryHelpers.AddQueryString(uri, "name", aVariableName);
 
@@ -336,15 +346,11 @@ namespace WebApplication
         {
             try
             {
-                HttpClient httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri(mServerBaseAddress);
-
                 String uri = "/asix/v1/variable/aggregate";
                 uri = QueryHelpers.AddQueryString(uri, "name", aVariableName);
                 uri = QueryHelpers.AddQueryString(uri, "aggregate", aAggregate);
                 uri = QueryHelpers.AddQueryString(uri, "periodLength", aPeriodLength);
                 uri = QueryHelpers.AddQueryString(uri, "refershInterval", aRefershInterval);
-
 
 
                 HttpResponseMessage response = httpClient.GetAsync(uri).Result;
@@ -377,10 +383,6 @@ namespace WebApplication
         {
             try
             {
-                HttpClient httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri(mServerBaseAddress);
-                // ?name=A000&aggregate=Average&periodStart=DAY&periodLength=1D&resampleInterval=1H
-
                 String uri = "/asix/v1/variable/archive/raw";
                 uri = QueryHelpers.AddQueryString(uri, "name", aVariableName);
                 uri = QueryHelpers.AddQueryString(uri, "periodStart", aPeriodStartOpc);
@@ -421,9 +423,6 @@ namespace WebApplication
         {
             try
             {
-                HttpClient httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri(mServerBaseAddress);
-
                 String uri = "/asix/v1/variable/archive/processed";
                 uri = QueryHelpers.AddQueryString(uri, "name", aVariableName);
                 uri = QueryHelpers.AddQueryString(uri, "aggregate", aAggregate);
@@ -432,7 +431,6 @@ namespace WebApplication
                 uri = QueryHelpers.AddQueryString(uri, "resampleInterval", aResampleIntervalOpc);
                 if (!string.IsNullOrEmpty(aArchiveType))
                     uri = QueryHelpers.AddQueryString(uri, "archiveType", aArchiveType);
-
 
 
                 HttpResponseMessage response = httpClient.GetAsync(uri).Result;
@@ -463,13 +461,9 @@ namespace WebApplication
         {
             try
             {
-                HttpClient httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri(mServerBaseAddress);
-
                 String uri = "/asix/v1/alarm/state";
                 uri = QueryHelpers.AddQueryString(uri, "domain", aDomainName);
                 uri = QueryHelpers.AddQueryString(uri, "name", aAlarmName);
-
 
 
                 HttpResponseMessage response = httpClient.GetAsync(uri).Result;
@@ -496,13 +490,16 @@ namespace WebApplication
         }
 
 
+        class ServerError
+        {
+            public string Message;
+        }
+
+
         public HistAlarmArchive ReadHistAlarmArchive(string aDomainName, DateTime aPeriodStart, TimeSpan aPeriodLength)
         {
             try
             {
-                HttpClient httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri(mServerBaseAddress);
-
                 String uri = "/asix/v1/alarm/archive";
                 uri = QueryHelpers.AddQueryString(uri, "domain", aDomainName);
                 uri = QueryHelpers.AddQueryString(uri, "periodStart", aPeriodStart.ToString("o"));
