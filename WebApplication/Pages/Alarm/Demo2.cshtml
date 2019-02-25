@@ -1,0 +1,94 @@
+﻿@page
+@model WebApplication.Pages.Alarm.Demo2Model
+@{
+    ViewData["Title"] = "Alarm/Demo2";
+}
+
+
+<div class="jumbotron bg-light shadow-sm">
+    <h1 class="display-4">Odczyt archiwum alarmów</h1>
+
+    <hr class="my-4">
+
+    <form method="post">
+        <div class="form-group row">
+            <div class="col-1" --style="width:10rem">Data</div> 
+            <div class="col-3" --style="width:20rem"><input asp-for="@Model.DateReadTime" style="width:100%"/></div>
+            </div>
+        <div class="form-group row">
+            <div  class="col-1">Okres</div>  
+            <div  class="col-3"><select asp-for="@Model.PeriodLength" asp-items="@Model.Periods" style="width:100%"></select> </div>
+            </div>
+        <div class="form-group row">
+            <button type="submit" class="btn btn-primary">Odśwież</button>    
+            </div>
+    </form>
+</div>
+
+
+@if (!@Model.mHistAlarmArchive.readSucceeded)
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.mHistAlarmArchive.readStatusString;
+    </div>
+    return;
+}
+
+
+@{
+    int count = @Model.mHistAlarmArchive.alarms.Count();
+}
+
+
+<div class="alert alert-info" role="alert">
+    @if (@Model.mHistAlarmArchive.moreDataAvailable)
+    {
+        @:Przeczytano pierwsze @count alarmów.
+    }
+    else
+    {
+        @:Liczba przeczytanych alarmów: @count.
+    }
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nazwa</th>
+            <th scope="col">Opis</th>
+            <th scope="col">Czas początku</th>
+            <th scope="col">Czas końca</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @for (int i = 0; i < count; ++i)
+        {
+            <tr>
+                <th scope="row">@(i + 1)</th>
+            
+                @{
+                    HistAlarmState histAlarmState = Model.mHistAlarmArchive.alarms[i];
+                }
+
+                <td>@histAlarmState.name</td>
+
+                <td>@histAlarmState.description</td>
+
+                <td>@histAlarmState.startTime.ToLocalTime().ToString()</td>
+
+                @if (histAlarmState.endTime.HasValue)
+                {
+                    <td>@histAlarmState.endTime.Value.ToLocalTime().ToString()</td>
+                }
+                else
+                {
+                    <td></td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

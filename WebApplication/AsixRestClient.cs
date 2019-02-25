@@ -7,6 +7,12 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace WebApplication
 {
+    public class ServerError
+    {
+        public string Message;
+    }
+
+
     public class VariableAttributes
     {
         public string id = "";
@@ -159,6 +165,47 @@ namespace WebApplication
         public bool ack;           // – czy alarm jest potwierdzony.
     };
 
+
+    public class HistAlarmState
+    {
+        public string name; // – nazwa alarmu,
+
+        public string description; // – opis alarmu,
+
+        public string priority; // – priorytet alarmu,
+
+        public bool startOnly; // – wartość true, jeśli alarm ma tylko początek.
+
+        public DateTime startTime; // – data początku alarmu,
+
+        public DateTime startDetectTime; // – data detekcji początku alarmu,
+
+        public DateTime? endTime; // – data końca alarmu; null jeśli alarm się nie zakończył,
+
+        public DateTime? endDetectTime; // – data detekcji końca alarmu; null jeśli alarm się nie zakończył,
+
+        public bool ack; // – czy alarm jest potwierdzony,
+
+        public string ackUser; // – nazwa użytkownika, który potwierdził alarm,
+
+        public string ackStation; // – nazwa komputera, na którym potwierdzono alarm,
+
+        public DateTime? ackTime; // – data potwierdzenia alarmu,
+
+        public string ackNote; // – notatka potwierdzenia alarmu.
+    }
+
+
+    public class HistAlarmArchive
+    {
+        public bool readSucceeded; // – wynik odczytu z archiwum alarmów – wartość typu bool,
+
+        public string readStatusString; // – tekstowy opis błędu odczytu,
+
+        public bool moreDataAvailable; // – w podanym okresie znajduje się więcej alarmów niż podano w parametrze limit,
+
+        public HistAlarmState[] alarms; // – tablica obiektów wartości archiwalnych alarmów.
+    }
 
 
     public class AsixRestClient
@@ -448,5 +495,50 @@ namespace WebApplication
             }
         }
 
+
+        public HistAlarmArchive ReadHistAlarmArchive(string aDomainName, DateTime aPeriodStart, TimeSpan aPeriodLength)
+        {
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.BaseAddress = new Uri(mServerBaseAddress);
+
+                String uri = "/asix/v1/alarm/archive";
+                uri = QueryHelpers.AddQueryString(uri, "domain", aDomainName);
+                uri = QueryHelpers.AddQueryString(uri, "periodStart", aPeriodStart.ToString("o"));
+                uri = QueryHelpers.AddQueryString(uri, "periodLength", aPeriodLength.ToString());
+
+
+                HttpResponseMessage response = httpClient.GetAsync(uri).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    try
+                    {
+                        ServerError serverError = response.Content.ReadAsAsync<ServerError>().Result;
+
+                        HistAlarmArchive histAlarmArchive = new HistAlarmArchive();
+                        histAlarmArchive.readSucceeded = false;
+                        histAlarmArchive.readStatusString = "Błąd: " + serverError.Message;
+                        return histAlarmArchive;
+                    }
+                    catch (Exception)
+                    {
+                        HistAlarmArchive histAlarmArchive = new HistAlarmArchive();
+                        histAlarmArchive.readSucceeded = false;
+                        histAlarmArchive.readStatusString = "Błąd http: " + response.StatusCode.ToString();
+                        return histAlarmArchive;
+                    }
+                }
+
+                return response.Content.ReadAsAsync<HistAlarmArchive>().Result;
+            }
+            catch (Exception e)
+            {
+                HistAlarmArchive histAlarmArchive = new HistAlarmArchive();
+                histAlarmArchive.readSucceeded = false;
+                histAlarmArchive.readStatusString = "Błąd: " + e.Message;
+                return histAlarmArchive;
+            }
+        }
     }
 }

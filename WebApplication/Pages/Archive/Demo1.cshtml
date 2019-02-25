@@ -9,18 +9,14 @@
 
     <hr class="my-4">
 
-
-
     <form method="post">
         <p>
-            Data: <input --type="datetime-local"  asp-for="@Model.DateReadTime" />
+            Data: <input asp-for="@Model.DateReadTime" />
             <input type="submit" value="Odśwież" />
         </p>
     </form>
-
-        @*<a id="btnRefresh" class="btn btn-secondary" asp-area="" asp-page="Archive/Demo1">Odśwież stronę</a>
-        <script>document.getElementById("btnRefresh").focus();</script>*@
 </div>
+
 
 @if (!@Model.mVariableAggregateArchiveA000.readSucceeded)
 {
@@ -92,5 +88,5 @@
         </tr>
 
         }
-            </tbody>
+    </tbody>
 </table>
