@@ -14,11 +14,32 @@ namespace WebApplication
     /// </summary>
     public class VariableAttributes
     {
+        /// <summary>
+        /// Nazwa zmiennej
+        /// </summary>
         public string id = "";
+
+        /// <summary>
+        /// Wynik odczytu wartości atrybutu zmiennej
+        /// </summary>
         public bool readSucceeded = false;
+
+
+        /// <summary>
+        /// Tekstowy opis błędu odczytu
+        /// </summary>
         public string readStatusString;
 
+
+        /// <summary>
+        /// Lista nazw czytanych atrybutów
+        /// </summary>
         public List<string> mAttributeNameList;
+
+
+        /// <summary>
+        /// Lista nazwa wartości atrybutów
+        /// </summary>
         public List<string> mAttributeValueList;
     };
 
@@ -311,6 +332,11 @@ namespace WebApplication
 
 
 
+        /// <summary>
+        /// Odczyt wartości bieżącej zmiennej
+        /// </summary>
+        /// <param name="aVariableName">Nazwa zmiennej aplikacji Asix.Evo</param>
+        /// <returns></returns>
         public VariableState ReadVariableState(string aVariableName)
         {
             try
@@ -345,6 +371,15 @@ namespace WebApplication
 
 
 
+
+        /// <summary>
+        /// Odczyt wartości bieżącej agregatu zmiennej
+        /// </summary>
+        /// <param name="aVariableName">Nazwa zmiennej aplikacji Asix.Evo</param>
+        /// <param name="aAggregate">Nazwa agregatu</param>
+        /// <param name="aPeriodLength">Długość okres, za który wyliczany jest agregat; długość należy podać w formacie czasu OPC.</param>
+        /// <param name="aRefershInterval">Okres wyliczania agregatu; długość należy podać w formacie czasu OPC.</param>
+        /// <returns></returns>
         public VariableState ReadVariableAggregate(string aVariableName, string aAggregate, string aPeriodLength, string aRefershInterval = "60s")
         {
             try
@@ -382,6 +417,15 @@ namespace WebApplication
 
 
 
+        /// <summary>
+        /// Odczyt surowych wartości historycznych zmiennej.
+        /// </summary>
+        /// <param name="aVariableName">Nazwa zmiennej</param>
+        /// <param name="aPeriodStartOpc">Początek okresu, z którego pobierane są dane; datę należy podać w formacie OPC.</param>
+        /// <param name="aPeriodLengthOpc">Długość okresu, z którego pobierane są dane; długość należy podać w formacie OPC.</param>
+        /// <param name="aArchiveType">Opcjonalny parametr określający typu archiwum, z którego należy pobrać wartości archiwalne.</param>
+        /// <param name="aMaxNumberOfSamples">Opcjonalny parametr określający ile maksymalnie próbek może zwrócić funkcja.</param>
+        /// <returns></returns>
         public VariableRawArchive ReadVariableRawArchive(string aVariableName, string aPeriodStartOpc, string aPeriodLengthOpc, string aArchiveType = "", int aMaxNumberOfSamples = 0)
         {
             try
@@ -421,6 +465,16 @@ namespace WebApplication
 
 
 
+        /// <summary>
+        /// Odczyt zagregowanych wartości historycznych zmiennej.
+        /// </summary>
+        /// <param name="aVariableName">Nazwa zmiennej aplikacji Asix.Evo</param>
+        /// <param name="aAggregate">Nazwa agregatu</param>
+        /// <param name="aPeriodStartOpc">Początek okresu, z którego pobierane są dane; datę należy podać w formacie OPC.</param>
+        /// <param name="aPeriodLengthOpc">Długość okres, za który wyliczany jest agregat; długość należy podać w formacie czasu OPC.</param>
+        /// <param name="aResampleIntervalOpc">Długość interwału agregatu; długość należy podać w formacie OPC.</param>
+        /// <param name="aArchiveType">Opcjonalny parametr określający typu archiwum, z którego należy pobrać wartości archiwalne.</param>
+        /// <returns></returns>
         public VariableAggregateArchive ReadVariableAggregateArchive(string aVariableName, string aAggregate, 
             string aPeriodStartOpc, string aPeriodLengthOpc, string aResampleIntervalOpc, string aArchiveType = "")
         {
@@ -460,6 +514,13 @@ namespace WebApplication
         }
 
 
+
+        /// <summary>
+        /// Odczyt bieżącego stan alarmu. Dane pobierane są z logu alarmów aktywnych.
+        /// </summary>
+        /// <param name="aDomainName">Nazwa domeny alarmów</param>
+        /// <param name="aAlarmName">Nazwa alarmu</param>
+        /// <returns></returns>
         public AlarmState ReadAlarmState(string aDomainName, string aAlarmName)
         {
             try
@@ -499,6 +560,14 @@ namespace WebApplication
         }
 
 
+
+        /// <summary>
+        /// Odczyt wartości historycznych alarmów. Do realizacji zapytania konieczne jest włączenie na serwerze aplikacji Asix.Evo, w opcjach domeny alarmów, archiwum SQL.
+        /// </summary>
+        /// <param name="aDomainName">Nazwa domeny alarmów</param>
+        /// <param name="aPeriodStart">Początek okresu, w którym należy wyszukiwać alarmy; datę należy podać w formacie ISO8601 lub w lokalnym formacie czasu serwera.</param>
+        /// <param name="aPeriodLength">Długość okresu, w którym należy wyszukiwać alarmy; długość okresu należy podać w formacie .NET.</param>
+        /// <returns></returns>
         public HistAlarmArchive ReadHistAlarmArchive(string aDomainName, DateTime aPeriodStart, TimeSpan aPeriodLength)
         {
             try
