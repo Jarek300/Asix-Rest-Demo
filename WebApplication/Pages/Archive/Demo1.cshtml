@@ -4,6 +4,7 @@
     ViewData["Title"] = "Archive/Demo1";
 }
 
+@*Nagłówek strony*@
 <div class="jumbotron bg-light shadow-sm">
     <h1 class="display-4">Odczyt wartości archiwalnych agregowanych</h1>
 
@@ -12,19 +13,20 @@
     <form method="post">
         <p>
             Data: <input asp-for="@Model.DateReadTime" />
-            <input type="submit" value="Odśwież" />
+            <input type="submit" value="Czytaj" />
         </p>
     </form>
 </div>
 
 
+
+@*Obsługa błędów*@
 @if (!@Model.mVariableAggregateArchiveA000.readSucceeded)
 {
     <div class="alert alert-danger" role="alert">
         @Model.mVariableAggregateArchiveA000.readStatusString;
     </div>
 }
-
 
 @if (!@Model.mVariableAggregateArchiveA004.readSucceeded)
 {
@@ -45,7 +47,11 @@
     int count = @Model.mVariableAggregateArchiveA000.samples.Count();
 }
 
+
+@*Generowanie tablicy wyświetlającej dane pobrane z archiwum aplikacji*@
 <table class="table">
+    
+    @*Nagłówek tablicy*@
     <thead>
         <tr>
             <th scope="col">#</th>
@@ -54,39 +60,39 @@
             <th scope="col">@Model.mVariableAggregateArchiveA004.id</th>
         </tr>
     </thead>
+
     <tbody>
 
         @for (int i = 0; i < count; ++i)
         {
+            //Kolejny wiersz tablicy
+
             VariableAggregateSample sampleA000 = @Model.mVariableAggregateArchiveA000.samples[i];
             VariableAggregateSample sampleA004 = @Model.mVariableAggregateArchiveA004.samples[i];
 
-        <tr>
-            <th scope="row">@(i + 1)</th>
-            <td>@sampleA000.t.ToLocalTime().ToString()</td>
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@sampleA000.t.ToLocalTime().ToString()</td>
 
-            @if (@sampleA000.IsQualityBad())
-            {
-                <td></td>
-            }
-            else
-            {
-                <td>@sampleA000.v.ToString("F1")</td>
-            }
-
-
-            @if (@sampleA004.IsQualityBad())
-            {
-                <td></td>
-            }
-            else
-            {
-                <td>@sampleA004.v.ToString("F1")</td>
-            }
+                @if (@sampleA000.IsQualityBad())
+                {
+                    <td></td>
+                }
+                else
+                {
+                    <td>@sampleA000.v.ToString("F1")</td>
+                }
 
 
-        </tr>
-
+                @if (@sampleA004.IsQualityBad())
+                {
+                    <td></td>
+                }
+                else
+                {
+                    <td>@sampleA004.v.ToString("F1")</td>
+                }
+            </tr>
         }
     </tbody>
 </table>
