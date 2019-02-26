@@ -44,37 +44,86 @@ namespace WebApplication
     };
 
 
+
+    /// <summary>
+    /// Typ wyniku zwracanego przez funkcję ReadAttributeNames
+    /// </summary>
     public class ServerAttributes
     {
+        /// <summary>
+        /// Wynik odczytu nazw atrybutu
+        /// </summary>
         public bool readSucceeded = false;
+
+        /// <summary>
+        /// Tekstowy opis błędu odczytu
+        /// </summary>
         public string readStatusString;
 
+        /// <summary>
+        /// Lista wartości atrybutów
+        /// </summary>
         public List<string> mAttributeNameList;
     };
 
 
+    /// <summary>
+    /// Typ wyniku zwracanego przez funkcję ReadVariableState, reprezentuje stan jednej zmiennej
+    /// </summary>
     public class VariableState
     {
+        /// <summary>
+        /// Nazwa zmiennej
+        /// </summary>
         public string id = "";
+
+        /// <summary>
+        /// Wynik odczytu stanu zmiennej
+        /// </summary>
         public bool readSucceeded = false;
+
+        /// <summary>
+        /// Tekstowy opis błędu odczytu,
+        /// </summary>
         public string readStatusString;
+
+        /// <summary>
+        /// Stempel czasu wartości zmiennej
+        /// </summary>
         public DateTime timeStamp = DateTime.UtcNow;
+
+        /// <summary>
+        /// Jakość OPC wartości zmiennej
+        /// </summary>
         public uint quality = 0;
+
+        /// <summary>
+        /// Wartość zmiennej, typ pola zależy do typu zmiennej w aplikacji systemu Asix
+        /// </summary>
         public object value = null;
 
 
+        /// <summary>
+        /// Funkcja pozwala sprawdzić czy jakość zmiennej jest dobra
+        /// </summary>
         public bool IsQualityGood()
         {
             return (quality & 0xC0) == 0xC0;
         }
 
 
+        /// <summary>
+        /// Funkcja pozwala sprawdzić czy jakość zmiennej jest niepewna
+        /// </summary>
         public bool IsQualityUncertain()
         {
             return (quality & 0xC0) == 0x40;
         }
 
 
+        /// <summary>
+        /// Funkcja pozwala sprawdzić czy jakość zmiennej jest zła
+        /// </summary>
         public bool IsQualityBad()
         {
             return (quality & 0xC0) == 0;
@@ -83,24 +132,47 @@ namespace WebApplication
 
 
 
+    /// <summary>
+    /// Reprezentuje stan jednej zarchiwizowanje próbki zmiennej
+    /// </summary>
     public class VariableRawSample
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public DateTime t; // – początek interwału, dla którego wyliczono wartość agregatu,
+
+        /// <summary>
+        /// 
+        /// </summary>
         public uint q;     // – jakość próbki,
+
+        /// <summary>
+        /// 
+        /// </summary>
         public double v;   // – wartość próbki; wartość jest zawsze typu liczbowego.
 
+        /// <summary>
+        /// Funkcja pozwala sprawdzić czy jakość zmiennej jest dobra
+        /// </summary>
         public bool IsQualityGood()
         {
             return (q & 0xC0) == 0xC0;
         }
 
 
+        /// <summary>
+        /// Funkcja pozwala sprawdzić czy jakość zmiennej jest niepewna
+        /// </summary>
         public bool IsQualityUncertain()
         {
             return (q & 0xC0) == 0x40;
         }
 
 
+        /// <summary>
+        /// Funkcja pozwala sprawdzić czy jakość zmiennej jest zła
+        /// </summary>
         public bool IsQualityBad()
         {
             return (q & 0xC0) == 0;
@@ -109,122 +181,280 @@ namespace WebApplication
 
 
 
+    /// <summary>
+    /// Typ wyniku zwracanego przez funkcję ReadVariableRawArchive, reprezentuje fragment archiwum wartości surowych jednej zmiennej
+    /// </summary>
     public class VariableRawArchive
     {
-        public string id;  // – nazwa zmiennej i nazwa agregatu oddzielone ukośnikiem,
+        /// <summary>
+        /// Nazwa zmiennej i nazwa agregatu oddzielone ukośnikiem
+        /// </summary>
+        public string id;
 
-        public bool readSucceeded; // – wynik odczytu wartości historycznych zmiennej – wartość typu bool,
-        public string readStatusString; // – tekstowy opis błędu odczytu,
+        /// <summary>
+        /// Wynik odczytu wartości historycznych zmiennej
+        /// </summary>
+        public bool readSucceeded;
 
-        public bool moreDataAvailable;  // w podanym okresie znajduje się więcej próbek niż podano w parametrze maxNumberOfSamples,
-        public DateTime periodStartTime; // – początek okresu, dla którego pobrano dane,
-        public DateTime periodEndTime; // – koniec okresu, dla którego pobrano dane,
+        /// <summary>
+        /// Tekstowy opis błędu odczytu
+        /// </summary>
+        public string readStatusString; 
 
-        public VariableRawSample[] samples; // – tablica obiektów wartości 
+        /// <summary>
+        /// Flata informująca, że w podanym okresie znajduje się więcej próbek niż podano w parametrze maxNumberOfSamples,
+        /// </summary>
+        public bool moreDataAvailable;  
+
+        /// <summary>
+        /// Początek okresu, dla którego pobrano dane,
+        /// </summary>
+        public DateTime periodStartTime; 
+
+        /// <summary>
+        /// Koniec okresu, dla którego pobrano dane
+        /// </summary>
+        public DateTime periodEndTime; 
+
+        /// <summary>
+        /// Tablica wartości archiwalnych
+        /// </summary>
+        public VariableRawSample[] samples;
     };
 
 
 
 
-
+    /// <summary>
+    /// Reprezentuje stan jednej zagregowanej próbki zmiennej
+    /// </summary>
     public class VariableAggregateSample
     {
-        public DateTime t; // – początek interwału, dla którego wyliczono wartość agregatu,
-        public DateTime e; // – koniec interwału, dla którego wyliczono wartość agregatu,
-        public uint q;     // – jakość próbki,
-        public double v;   // – wartość próbki; wartość jest zawsze typu liczbowego.
+        /// <summary>
+        /// Początek interwału, dla którego wyliczono wartość agregatu,
+        /// </summary>
+        public DateTime t;
 
+        /// <summary>
+        /// Koniec interwału, dla którego wyliczono wartość agregatu
+        /// </summary>
+        public DateTime e;
+
+        /// <summary>
+        /// Jakość próbki
+        /// </summary>
+        public uint q;     
+
+        /// <summary>
+        /// Wartość próbki; wartość jest zawsze typu liczbowego
+        /// </summary>
+        public double v;  
+
+
+        /// <summary>
+        /// Funkcja pozwala sprawdzić czy jakość zmiennej jest dobra
+        /// </summary>
         public bool IsQualityGood()
         {
             return (q & 0xC0) == 0xC0;
         }
 
 
+        /// <summary>
+        /// Funkcja pozwala sprawdzić czy jakość zmiennej jest niepewna
+        /// </summary>
         public bool IsQualityUncertain()
         {
             return (q & 0xC0) == 0x40;
         }
 
 
+        /// <summary>
+        /// Funkcja pozwala sprawdzić czy jakość zmiennej jest zła
+        /// </summary>
         public bool IsQualityBad()
         {
             return (q & 0xC0) == 0;
         }
-
     };
 
 
+    /// <summary>
+    /// Typ wyniku zwracanego przez funkcję ReadVariableAggregateArchive, reprezentuje fragment archiwum wartości agregowanych jednej zmiennej
+    /// </summary>
     public class VariableAggregateArchive
     {
-        public string id;  // – nazwa zmiennej i nazwa agregatu oddzielone ukośnikiem,
+        /// <summary>
+        /// Nazwa zmiennej i nazwa agregatu oddzielone ukośnikiem
+        /// </summary>
+        public string id; 
 
-        public bool readSucceeded; // – wynik odczytu wartości historycznych zmiennej – wartość typu bool,
-        public string readStatusString; // – tekstowy opis błędu odczytu,
+        /// <summary>
+        /// Wynik odczytu wartości historycznych zmiennej
+        /// </summary>
+        public bool readSucceeded; 
 
-        public DateTime periodStartTime; // – początek okresu, dla którego pobrano dane,
-        public DateTime periodEndTime; // – koniec okresu, dla którego pobrano dane,
+        /// <summary>
+        /// Tekstowy opis błędu odczytu
+        /// </summary>
+        public string readStatusString; 
 
-        public VariableAggregateSample[] samples; // – tablica obiektów wartości archiwalnych.
+        /// <summary>
+        /// Początek okresu, dla którego pobrano dane
+        /// </summary>
+        public DateTime periodStartTime; 
+
+        /// <summary>
+        /// Koniec okresu, dla którego pobrano dane
+        /// </summary>
+        public DateTime periodEndTime; 
+
+        /// <summary>
+        /// Tablica wartości archiwalnych
+        /// </summary>
+        public VariableAggregateSample[] samples; 
     };
 
 
 
+    /// <summary>
+    /// Typ wyniku funkcji ReadAlarmState. Reprezentuje stan jednego alarmu
+    /// </summary>
     public class AlarmState
     {
-        public string id;  // – identyfikator alarmu(domena i nazwa alarmu oddzielone ukośnikiem),
+        /// <summary>
+        /// Identyfikator alarmu(domena i nazwa alarmu oddzielone ukośnikiem)
+        /// </summary>
+        public string id;
 
-        public bool readSucceeded; // – wynik odczytu stany alarmu – wartość typu bool,
+        /// <summary>
+        /// Wynik odczytu stany alarmu 
+        /// </summary>
+        public bool readSucceeded;
 
-        public string readStatusString;    // – tekstowy opis błędu odczytu,
+        /// <summary>
+        /// Tekstowy opis błędu odczytu
+        /// </summary>
+        public string readStatusString;  
 
-        public bool active;    // – czy alarm jest aktualnie aktywny,
+        /// <summary>
+        /// Flaga określający czy alarm jest aktualnie aktywny
+        /// </summary>
+        public bool active;   
 
-        public string stateDescription;    // – opis stanu alarmu,
+        /// <summary>
+        /// Opis stanu alarmu
+        /// </summary>
+        public string stateDescription;    
 
-        public bool ackAvailabe;   // – czy dostępna jest informacja o potwierdzeniu alarmu,
-        public bool ack;           // – czy alarm jest potwierdzony.
+        /// <summary>
+        /// Flaga określający czy dostępna jest informacja o potwierdzeniu alarmu
+        /// </summary>
+        public bool ackAvailabe;   
+
+        /// <summary>
+        /// Flaga określający czy alarm jest potwierdzony
+        /// </summary>
+        public bool ack;           
     };
 
 
+    /// <summary>
+    /// Klasa reprezentuje stana jednego zapisu w archiwum alarmów
+    /// </summary>
     public class HistAlarmState
     {
-        public string name; // – nazwa alarmu,
+        /// <summary>
+        /// Nazwa alarmu
+        /// </summary>
+        public string name;
 
-        public string description; // – opis alarmu,
+        /// <summary>
+        /// Opis alarmu
+        /// </summary>
+        public string description; 
 
-        public string priority; // – priorytet alarmu,
+        /// <summary>
+        /// Priorytet alarmu
+        /// </summary>
+        public string priority; 
 
-        public bool startOnly; // – wartość true, jeśli alarm ma tylko początek.
+        /// <summary>
+        /// Wartość true, jeśli alarm ma tylko początek
+        /// </summary>
+        public bool startOnly; 
 
-        public DateTime startTime; // – data początku alarmu,
+        /// <summary>
+        /// Data początku alarmu
+        /// </summary>
+        public DateTime startTime; 
 
-        public DateTime startDetectTime; // – data detekcji początku alarmu,
+        /// <summary>
+        /// Data detekcji początku alarmu
+        /// </summary>
+        public DateTime startDetectTime; 
 
-        public DateTime? endTime; // – data końca alarmu; null jeśli alarm się nie zakończył,
+        /// <summary>
+        /// Data końca alarmu; null jeśli alarm się nie zakończył
+        /// </summary>
+        public DateTime? endTime; 
 
-        public DateTime? endDetectTime; // – data detekcji końca alarmu; null jeśli alarm się nie zakończył,
+        /// <summary>
+        /// Data detekcji końca alarmu; null jeśli alarm się nie zakończył
+        /// </summary>
+        public DateTime? endDetectTime; 
 
-        public bool ack; // – czy alarm jest potwierdzony,
+        /// <summary>
+        /// Flaga określająca czy alarm jest potwierdzony
+        /// </summary>
+        public bool ack; 
 
-        public string ackUser; // – nazwa użytkownika, który potwierdził alarm,
+        /// <summary>
+        /// Nazwa użytkownika, który potwierdził alarm
+        /// </summary>
+        public string ackUser; 
 
-        public string ackStation; // – nazwa komputera, na którym potwierdzono alarm,
+        /// <summary>
+        /// Nazwa komputera, na którym potwierdzono alarm
+        /// </summary>
+        public string ackStation;
 
-        public DateTime? ackTime; // – data potwierdzenia alarmu,
+        /// <summary>
+        /// Data potwierdzenia alarmu
+        /// </summary>
+        public DateTime? ackTime; 
 
-        public string ackNote; // – notatka potwierdzenia alarmu.
+        /// <summary>
+        /// Notatka potwierdzenia alarmu
+        /// </summary>
+        public string ackNote; 
     }
 
 
+    /// <summary>
+    /// Typ wyniku funkcji ReadHistAlarmArchive. Reprezentuje stan zbioru alarmów pobranego z archiwum alarmów
+    /// </summary>
     public class HistAlarmArchive
     {
-        public bool readSucceeded; // – wynik odczytu z archiwum alarmów – wartość typu bool,
+        /// <summary>
+        /// Wynik odczytu z archiwum alarmów
+        /// </summary>
+        public bool readSucceeded;
 
-        public string readStatusString; // – tekstowy opis błędu odczytu,
+        /// <summary>
+        /// Tekstowy opis błędu odczytu
+        /// </summary>
+        public string readStatusString; 
 
-        public bool moreDataAvailable; // – w podanym okresie znajduje się więcej alarmów niż podano w parametrze limit,
+        /// <summary>
+        /// Flaga określający, czy w podanym okresie znajduje się więcej alarmów niż podano w parametrze limit
+        /// </summary>
+        public bool moreDataAvailable; 
 
-        public HistAlarmState[] alarms; // – tablica obiektów wartości archiwalnych alarmów.
+        /// <summary>
+        /// Tablica obiektów wartości archiwalnych alarmów
+        /// </summary>
+        public HistAlarmState[] alarms; 
     }
 
 
