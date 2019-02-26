@@ -5,19 +5,9 @@
 }
 
 
+@*Nagłówek strony*@
 <div class="jumbotron bg-light shadow-sm">
     <h1 class="display-4">Odczyt wartości zmiennej</h1>
-
-    @if (!string.IsNullOrEmpty(Model.mReadError))
-    {
-        <hr class="my-4">
-        <div class="card text-white bg-danger mb-3">
-            <div class="card-header"><h5>Błąd odczytu</h5></div>
-            <div class="card-body">
-                <p class="card-text">@Model.mReadError</p>
-            </div>
-        </div>
-    }
 
     <hr class="my-4">
 
@@ -26,14 +16,22 @@
 </div>
 
 
-@if (string.IsNullOrEmpty(Model.mReadError))
+
+@*Obsługa błędów*@
+@if (!string.IsNullOrEmpty(Model.mReadError))
 {
-    <div class="card bg-light shadow-sm " style="width: 18rem;">
-        <div class="card-body">
-            <p>Przepływ gazu do pieca</p>
-            <h3>@Model.mValueFormatted m³/h</h3>
-        </div>
+    <div class="alert alert-danger" role="alert">
+        Błąd odczytu: @Model.mReadError;
     </div>
+
+    return;
 }
 
 
+@*Karta wyświetlająca sformatowaną wartość zmiennej*@
+<div class="card bg-light shadow-sm " style="width: 18rem;">
+    <div class="card-body">
+        <p>Przepływ gazu do pieca</p>
+        <h3>@Model.mValueFormatted m³/h</h3>
+    </div>
+</div>
