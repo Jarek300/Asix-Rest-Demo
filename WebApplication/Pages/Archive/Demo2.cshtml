@@ -36,11 +36,13 @@
 }
 
 
-
+@*Włącza bibliotekę Google Charts*@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+@*Kontener w którym zostanie umieszczony wykres*@
 <div id="chart_div" style="height:30rem;"></div>
 
-
+@*Generuje po stronie klienta wykres liniowy przy pomocy biblioteki Google Charts*@
 <script>
     google.charts.load('current', { 'packages': ['corechart'] });
     google.charts.setOnLoadCallback(drawChart);
@@ -51,7 +53,7 @@
         data.addColumn('number', 'A000');
 
         data.addRows([
-            // data format
+            // data format:
             // [new Date(2015, 0, 1, 1, 2, 3), 5],
 
             @for (int i = 0; i < count; ++i)
@@ -87,7 +89,6 @@
             legend: 'none',
             lineWidth: 2,
             chartArea: { width: '90%', height: '90%', backgroundColor: 'cornsilk' },
-            // explorer: {actions: ['dragToPan', 'rightClickToReset'], axis: 'horizontal'}, // tests
             hAxis: {
                 format: 'HH:mm:ss',
                 gridlines: { count: 10 }

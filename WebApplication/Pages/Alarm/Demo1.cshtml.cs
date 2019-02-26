@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebApplication.Pages.Alarm
 {
+    /// <summary>
+    /// Reprezentuje przeczytany stan alarmu
+    /// </summary>
     public class AlarmModel
     {
         public AlarmModel(string aDomain, string aName)
@@ -18,13 +21,20 @@ namespace WebApplication.Pages.Alarm
     }
 
 
+    /// <summary>
+    /// Przykład odczytu i wyświetlenia stanu alarmów bieżąych
+    /// </summary>
     public class Demo1Model : PageModel
     {
-        // 98, 108
-
+        /// <summary>
+        /// Przechowuje przeczytane stany alarmów
+        /// </summary>
         public List<AlarmModel> mAlarmModelList = new List<AlarmModel>();
 
 
+        /// <summary>
+        /// Konstruktor klasy modelu strony 
+        /// </summary>
         public Demo1Model()
         {
             mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm nr 011"));
@@ -34,15 +44,22 @@ namespace WebApplication.Pages.Alarm
             mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm nr 155"));
             mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm nr 202"));
             mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm nr 227"));
-            mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm nr 'test'"));
+            mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm_AAA"));     // nieistniejąca nazwa alarmu, demonstruje obsługę błędu odczytu alarmu
         }
 
+
+        /// <summary>
+        /// Funkcja wywoływana przy pobieraniu strony przez przeglądarkę
+        /// </summary>
         public void OnGet()
         {
             ReadAlarmValue();
         }
 
 
+        /// <summary>
+        /// Funkcja realizująca odczyt stanu alarmów
+        /// </summary>
         void ReadAlarmValue()
         {
             AsixRestClient asixRestClient = new AsixRestClient();
@@ -51,5 +68,4 @@ namespace WebApplication.Pages.Alarm
                 alarmModel.mAlarmState = asixRestClient.ReadAlarmState(alarmModel.mDomain, alarmModel.mName);
         }
     }
-
 }

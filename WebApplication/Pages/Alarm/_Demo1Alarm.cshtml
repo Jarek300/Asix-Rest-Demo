@@ -1,43 +1,50 @@
 ﻿@model WebApplication.Pages.Alarm.AlarmModel
 
-
+@*Początek karty alarmu*@
 <div class="card bg-light shadow-sm" style="width: 18rem;">
 
+    @*Nagłówek karty alarmu zawierający nazwę alarmu*@
     <div class="card-header bg-light"><h4>@Model.mName</h4></div>
 
     <div class="card-body">
+        @*Wyświetlenie stanu alarmów jeśli odczyt się powiódł*@
         @if (Model.mAlarmState.readSucceeded)
         {
             <div class="d-flex justify-content-between">
 
                 <div class="pr-2">
+                    @*Wyświetlenie opisu alarmu jeśli jest dostępny lub tekstu Aktywny/Nieaktywny*@
                     @if (!string.IsNullOrEmpty(Model.mAlarmState.stateDescription))
                     {
                         @Model.mAlarmState.stateDescription
                     }
                     else
-                 if (Model.mAlarmState.active)
-                    {
-                        @:Aktywny
-                    }
-                    else
-                    {
-                        @:Nieaktywny
-                    }
+
+                    if (Model.mAlarmState.active)
+                        {
+                            @:Aktywny
+                        }
+                        else
+                        {
+                            @:Nieaktywny
+                        }
                 </div>
 
+                @*Wyświetlenie ikony reprezentującej stan alarmu*@
                 @if (Model.mAlarmState.active)
                 {
-                    <i class="fas fa-bell fa-3x" --data-fa-transform="grow-32 left-6 up-3" style="color:red"></i>
+                    <i class="fas fa-bell fa-3x" style="color:red"></i>
                 }
                 else
                 {
-                    <i class="far fa-bell fa-3x" --data-fa-transform="grow-32 left-6 up-3" --style="color:red"></i>
+                    <i class="far fa-bell fa-3x"></i>
                 }
             </div>
         }
     </div>
 
+
+    @*Wyświetlenie tekst błędu jeśli odczyt się nie powiódł*@
     @if (!Model.mAlarmState.readSucceeded)
     {
         <div class="card-footer py-0 text-right text-white bg-danger">

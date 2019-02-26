@@ -26,6 +26,7 @@
 </div>
 
 
+@*Komunikat błędu jeśli odczyt nie powiódł się*@
 @if (!@Model.mHistAlarmArchive.readSucceeded)
 {
     <div class="alert alert-danger" role="alert">
@@ -52,6 +53,7 @@
 </div>
 
 
+@*Generowanie tablicy alarmów historycznych*@
 <table class="table">
     <thead>
         <tr>
