@@ -17,25 +17,16 @@
 }
 
 
-@for (int i = 0; i < rowCount; ++i)
-{
-    @:<div class="card-columns py-3">
+<div class="row justify-content-around py-3">
 
-        for (int j = 0; j < colCount; ++j)
-        {
-            int index = i * colCount + j;
+    @foreach (string name in variableNames)
+    {
+        VariableTemplate variableTemplate = new VariableTemplate(name);
 
-            if (index < variableNames.Count)
-            {
-                string name = variableNames[index];
-                VariableTemplate variableTemplate = new VariableTemplate(name);
+        <partial name="_Demo2Variable" model=variableTemplate />
+    }
 
-                <partial name="_Demo2Variable" model=variableTemplate />
-            }
-        }
-
-    @:</div>
-}
+</div>
 
 
 @{

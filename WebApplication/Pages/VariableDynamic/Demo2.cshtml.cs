@@ -13,6 +13,9 @@ namespace WebApplication.Pages.VariableDynamic
     /// </summary>
     public class VariableTemplate
     {
+        /// <summary>
+        /// Nazwa zmiennej. Identyfikuje główny DIV szablonu zmiennej
+        /// </summary>
         public string mName;
 
         public VariableTemplate(string aName)
