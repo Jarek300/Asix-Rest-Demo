@@ -1,0 +1,77 @@
+﻿@page
+@model WebApplication.Pages.VariableDynamic.Demo2Model
+@{
+    ViewData["Title"] = "Demo2";
+}
+
+<div class="jumbotron bg-light shadow-sm">
+    <h1 class="display-4">Odświeżanie wartości zmiennych</h1>
+</div>
+
+
+@{
+    List<string> variableNames = Model.mVariables.Keys.ToList();
+
+    const int colCount = 3;
+    int rowCount = (int)Math.Ceiling(1.0 * variableNames.Count / colCount);
+}
+
+
+@for (int i = 0; i < rowCount; ++i)
+{
+    @:<div class="card-columns py-3">
+
+        for (int j = 0; j < colCount; ++j)
+        {
+            int index = i * colCount + j;
+
+            if (index < variableNames.Count)
+            {
+                string name = variableNames[index];
+                VariableTemplate variableTemplate = new VariableTemplate(name);
+
+                <partial name="_Demo2Variable" model=variableTemplate />
+            }
+        }
+
+    @:</div>
+}
+
+
+@{
+    string variableRequest = "";
+    foreach (string v in variableNames)
+    {
+        variableRequest += "&name=" + Uri.EscapeDataString(v);
+    }
+}
+
+@section scripts{
+    <script>
+        function refreshVariables() {
+            var ajaxRequest = 'Demo2?handler=Variables@(Html.Raw(variableRequest))';
+            $.get(ajaxRequest, function (data) {
+                for (i = 0; i < data.length; i++)
+                    updateView(data[i].mName, data[i]);
+            });
+        }
+
+
+        function updateView(idView, variableModel) {
+            if (variableModel.mReadError) {
+                $("#" + idView + " #error").text(variableModel.mReadError);
+                $("#" + idView + " #error").show();
+            } else {
+                $("#" + idView + " #error").hide();
+            }
+
+            $("#" + idView + " #description").text(variableModel.mDecription);
+            $("#" + idView + " #value").text(variableModel.mValueFormatted + ' ' + variableModel.mUnit);
+            $("#" + idView + " #info").text(variableModel.mName + ', ' + variableModel.mDateTime);
+        }
+
+        refreshVariables();
+        setInterval(refreshVariables, 2000);
+    </script>
+}
+
