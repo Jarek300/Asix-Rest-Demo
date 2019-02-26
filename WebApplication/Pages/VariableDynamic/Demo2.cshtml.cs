@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace WebApplication.Pages.VariableDynamic
 {
+    /// <summary>
+    /// Model dla szablonu widoku zmiennej _Demo2Variable.cshtml
+    /// </summary>
     public class VariableTemplate
     {
         public string mName;
@@ -43,6 +46,11 @@ namespace WebApplication.Pages.VariableDynamic
         }
 
 
+        /// <summary>
+        /// Odczyt wartości bieżącej zmiennych
+        /// </summary>
+        /// <param name="name">Nazwa zmiennej, może wystapić wielokrotnie</param>
+        /// <returns></returns>
         public JsonResult OnGetVariables(string[] name)
         {
             if (name == null)
