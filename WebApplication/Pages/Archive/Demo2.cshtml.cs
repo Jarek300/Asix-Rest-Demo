@@ -28,8 +28,7 @@ namespace WebApplication.Pages.Archive
 
 
         void ReadData()
-        {
-           
+        {           
             AsixRestClient asixRestClient = new AsixRestClient();
             string periodStartOpc = DateReadTime.ToString("o");   // format ISO, też obsługiwany przez REST server
             mVariableRawArchiveA000 = asixRestClient.ReadVariableRawArchive("A000", periodStartOpc, "1H");
