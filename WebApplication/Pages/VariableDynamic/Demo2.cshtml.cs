@@ -43,6 +43,10 @@ namespace WebApplication.Pages.VariableDynamic
             mVariables["Nieznana"] = new VariableModel("Nieznana", "Nieznana zmienna", "");
         }
 
+        /// <summary>
+        /// Funkcja wywoływana przy pobieraniu strony przez przeglądarkę
+        /// Pusta, ponieważ wszystkie operacje odbywają się po stronie klienta
+        /// </summary>
         public void OnGet()
         {
 
