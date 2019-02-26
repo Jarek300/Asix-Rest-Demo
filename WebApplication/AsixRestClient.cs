@@ -232,7 +232,7 @@ namespace WebApplication
 
 
         /// <summary>
-        /// Funkcja czyta wartości atrybutów zmiennej.
+        /// Odczyt wartości atrybutów zmiennej.
         /// </summary>
         /// <param name="aVariableName">Nazwa zmiennej</param>
         /// <param name="aAttributeNameList">Lista nazw atrybutów zmiennej</param>
@@ -259,7 +259,6 @@ namespace WebApplication
                 return variableAttributes;
             }             
 
-
                 
             List<List<string>> content = response.Content.ReadAsAsync<List<List<string>>>().Result;                
             variableAttributes.mAttributeValueList = content[0];
@@ -279,6 +278,10 @@ namespace WebApplication
 
 
 
+        /// <summary>
+        /// Odczyt nazw dostępnych atrybutów zmiennych.
+        /// </summary>
+        /// <returns></returns>
         public ServerAttributes ReadAttributeNames()
         {
             ServerAttributes serverAttributes = new ServerAttributes();
