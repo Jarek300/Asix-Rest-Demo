@@ -6,28 +6,30 @@
 
 
 <div class="jumbotron bg-light shadow-sm">
-    <h1 class="display-4">Odczyt atrybutów zmiennej A000</h1>
-
-    @if (!string.IsNullOrEmpty(Model.mReadError))
-    {
-        <hr class="my-4">
-        <div class="card text-white bg-danger mb-3">
-            <div class="card-header"><h5>Błąd odczytu</h5></div>
-            <div class="card-body">
-                <p class="card-text">@Model.mReadError</p>
-            </div>
-        </div>
-    }
+    @*Nagłówek strony*@
+    <h1 class="display-4">Odczyt atrybutów zmiennej @Model.mVariableName</h1>
 
     <hr class="my-4">
 
+    @*Przycisk odświeżania strony*@
     <a id="btnRefresh" class="btn btn-secondary" asp-area="" asp-page="Variable/Demo1">Odśwież stronę</a>
     <script>document.getElementById("btnRefresh").focus();</script>
 </div>
 
 
-@if (string.IsNullOrEmpty(Model.mReadError))
+@*Obsługa błędów*@
+@if (!string.IsNullOrEmpty(Model.mReadError))
 {
+    <div class="alert alert-danger" role="alert">
+        @Model.mReadError;
+    </div>
+
+    return;
+}
+
+
+
+@*Tworzenie tablicy atrybutów*@
 <table class="table">
     <thead>
         <tr>
@@ -68,8 +70,5 @@
             <td>@Model.mVariableAttributes[4]</td>
         </tr>
 
-
     </tbody>
-</table>}
-
-
+</table>

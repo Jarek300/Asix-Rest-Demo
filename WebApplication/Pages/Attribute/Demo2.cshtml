@@ -5,19 +5,9 @@
 }
 
 
+@*Nagłówek strony*@
 <div class="jumbotron bg-light shadow-sm">
-    <h1 class="display-4">Odczyt wszystkich atrybutów zmiennej A000</h1>
-
-    @if (!string.IsNullOrEmpty(Model.mReadError))
-    {
-        <hr class="my-4">
-        <div class="card text-white bg-danger mb-3">
-            <div class="card-header"><h5>Błąd odczytu</h5></div>
-            <div class="card-body">
-                <p class="card-text">@Model.mReadError</p>
-            </div>
-        </div>
-    }
+    <h1 class="display-4">Odczyt wszystkich atrybutów zmiennej @Model.mVariableName</h1>
 
     <hr class="my-4">
 
@@ -26,9 +16,21 @@
 </div>
 
 
-@if (string.IsNullOrEmpty(Model.mReadError))
+
+@*Obsługa błędów*@
+@if (!string.IsNullOrEmpty(Model.mReadError))
 {
+    <div class="alert alert-danger" role="alert">
+        Błąd odczytu: @Model.mReadError;
+    </div>
+
+    return;
+}
+
+
+@*Tworzenie tablicy atrybutów*@
 <table class="table">
+    @*Nagłówek tablicy*@
     <thead>
         <tr>
             <th scope="col">#</th>
@@ -36,18 +38,18 @@
             <th scope="col">Wartość atrybutu</th>
         </tr>
     </thead>
-    <tbody>
 
+    @*Początek wierszy tablicy*@
+    <tbody>
         @for (int i = 0; i < Model.mAttributeNames.Count; ++i)
         {
+            //Kolejny wiersz tablicy
             <tr>
                 <th scope="row">@(i+1)</th>
                 <td>@Model.mAttributeNames[i]</td>
                 <td>@Model.mVariableAttributes[i]</td>
             </tr>
         }
-
     </tbody>
-</table>}
 
-
+</table>
