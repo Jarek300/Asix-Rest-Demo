@@ -10,18 +10,18 @@ Działanie programu - klienta REST - sprowadza się do wywołania odpowiedniej u
 Aplikacja **Asix-AspNetMvcCore-Demo** jest napisana w języku C# i działa na platformie .NET Core. Do tworzenia stron WWW użyta została biblioteka [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.2). Strony WWW działają zgodnie z modelem [Razor Pages](https://docs.microsoft.com/en-us/aspnet/core/razor-pages/?view=aspnetcore-2.2&tabs=visual-studio). Do formatowanie elementów stron używana jest bilioteka [Bootstrap](https://getbootstrap.com/).
 
 # Zawartość aplikacji
- * Attribute/Demo1 - odczyt wybranych atrybutów zmiennej
- * Attribute/Demo2 - odczyt wszystkich atrybutów  zmiennej
- * Variable/Demo1 - odczyt wartości bieżącej jednej zmiennej
- * Variable/Demo2 - odczyt wartości bieżącej wielu zmiennych
- * Variable/Demo3 - odczyt wartości bieżącej wielu zmiennych, sygnalizacja przekroczeń limitów, sygnalizacja trendu zmian wartości
- * VariableDynamic/Demo1 - odświeżanie wartości bieżącej wielu zmiennych bez przeładowywania całej strony
- * VariableDynamic/Demo2 - odświeżanie wartości bieżącej z użyciem ajax/json/jQuery
- * Archiwum/Demo1 - odczyt wartości historycznych agregowanych dwu zmiennych i wyświetlenie w postaci tabeli
- * Archiwum/Demo2 - odczyt wartości historycznych surowych jednej zmiennych i wyświetlenie w postaci wykresu
- * Alarm/Demo1 - odczyt wartości bieżącej wielu alarmów
- * Alarm/Demo2 - odczyt wartości historycznych z archiwum alarmów
- * AsixRestClient.cs - Klasa pomocnicza realizująca odczyt danych z serwera REST Asix.Evo.
+ * [Attribute/Demo1](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Attribute) - odczyt wybranych atrybutów zmiennej
+ * [Attribute/Demo2](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Attribute) - odczyt wszystkich atrybutów  zmiennej
+ * [Variable/Demo1](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Variable) - odczyt wartości bieżącej jednej zmiennej
+ * [Variable/Demo2](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Variable) - odczyt wartości bieżącej wielu zmiennych
+ * [Variable/Demo3](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Variable) - odczyt wartości bieżącej wielu zmiennych, sygnalizacja przekroczeń limitów, sygnalizacja trendu zmian wartości
+ * [VariableDynamic/Demo1](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/VariableDynamic) - odświeżanie wartości bieżącej wielu zmiennych bez przeładowywania całej strony
+ * [VariableDynamic/Demo2](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/VariableDynamic) - odświeżanie wartości bieżącej z użyciem ajax/json/jQuery
+ * [Archiwum/Demo1](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Archive) - odczyt wartości historycznych agregowanych dwu zmiennych i wyświetlenie w postaci tabeli
+ * [Archiwum/Demo2](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Archive) - odczyt wartości historycznych surowych jednej zmiennych i wyświetlenie w postaci wykresu
+ * [Alarm/Demo1](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Alarm) - odczyt wartości bieżącej wielu alarmów
+ * [Alarm/Demo2](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Alarm) - odczyt wartości historycznych z archiwum alarmów
+ * [AsixRestClient.cs](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/blob/master/WebApplication/AsixRestClient.cs) - Klasa pomocnicza realizująca odczyt danych z serwera REST Asix.Evo.
 
 Działająca aplikacja jest dostępna pod adresem [https://asixrestdemo.azurewebsites.net](https://asixrestdemo.azurewebsites.net)
 
