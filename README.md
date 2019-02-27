@@ -1,16 +1,17 @@
 ﻿# Opis
-Aplikacja **Asix-AspNetMvcCore-Demo** zawiera przykłady pobierania danych procesowych z serwera REST aplikacji Asix.Evo i umieszczania ich na stronach Web. 
+Aplikacja **Asix-AspNetMvcCore-Demo** zawiera przykłady pobierania danych procesowych z serwera REST aplikacji Asix.Evo i prezentowania ich na stronach Web. 
 
 [Asix.Evo](https://www.asix.com.pl) firmy [Askom](https://www.askom.pl) jest pakietem programowym klasy HMI/SCADA/MES umożliwiającym realizację komputerowych systemów wizualizacji, nadzoru i sterowania procesów przemysłowych. Asix.Evo ma możliwość udostępniania danych procesowych aplikacji m.in. za pośrednictwem serwera REST. Opis serwera REST jest dostepny [tutaj](https://www.askom.pl/WebHelp/Asix_Evo_9/AsixConnect_HTML5/index.htm#t=Serwer_REST_pakietu_Asix_Evo%2FHistoria_alarmow.htm).
 
-Projektanci często stają przed zadaniem stworzenia dla użytkownika aplikacji, która łączy dane z wielu źródeł danych i wyświetla je dla użytkownika w syntetyczny sposób. Mogą to być aplikacje dla systemu Windows, aplikacje internetowe lub aplikacje na urządzenia mobilne. Przykładem jest strona WWW - portal biurowca - prezentujący pracownikom informacje o działaniu infrastruktury budynku.
+Projektanci często stają przed zadaniem stworzenia dla użytkownika programu, która łączy dane z wielu źródeł danych i wyświetla je dla użytkownika w syntetyczny sposób. Mogą to być programy dla systemu Windows, appki na urządzenia mobilne lub portale internetowe. Przykładem może być strona WWW - portal biurowca - prezentujący pracownikom informacje o działaniu infrastruktury budynku.
 
-Aplikacja **Asix-AspNetMvcCore-Demo** ma pomóc użytkownikom tworzącym własne aplikacje, które to aplikacje muszą wyświetlić dane pochodzące z różnych źródeł w tym z aplikacji Asix.Evo. w dowolnej technologii
+Jeśli jednym ze źródeł danych jest aplikacja Asix.Evo to zalecanym sposobem pobierania danych z niej jest użycie serwera REST. Serwer REST jest wbudowany w Asix.Evo. Opis konfiguracji serwera REST jest dostępny [tutaj](https://www.askom.pl/WebHelp/Asix_Evo_9/AsixConnect_HTML5/index.htm#t=Serwer_REST_pakietu_Asix_Evo%2FUruchomienie_i_konfiguracja.htm).
 
-Aplikacja **Asix-AspNetMvcCore-Demo** jest stworzona przy pomocy technologii Asp.Net MVC Core 2.2 oraz biblioteki Bootstrap. Aby móc skompilować projekt należy zainstalować [Visual Studio 2017](https://visualstudio.microsoft.com/pl/downloads) oraz [.NET Core 2.2 SDK](https://dotnet.microsoft.com/download).
+Działanie programu, klienta REST, sprowadza się do wywołania odpowiedniej usługi serwera REST, odebranie odpowiedzi i wyświetlenie w odpowiedni sposób danych zawartych w odpowiedzi. Obecnie praktycznie wszystkie języki programowania i wszystkie platformy tworzenia aplikacji mają wbudowane mechanizmy wywoływania usług serwerów REST. 
 
+Aplikacja **Asix-AspNetMvcCore-Demo** pokazuje jak wywołać usługi serwera REST aplikacji Asix.Evo w języku C# na platformie .NET Core. Pokazuje również jak można przeczytane dane wyświetlić na stronach WWW.
 
-Zawartość projektu:
+# Zawartość aplikacji
  * Attribute/Demo1 - Odczyt wybranych atrybutów zmiennej
  * Attribute/Demo2 - Odczyt wszystkich atrybutów  zmiennej
  * Variable/Demo1 - Odczyt wartości bieżącej jednej zmiennej
@@ -26,6 +27,8 @@ Zawartość projektu:
 
 Działająca aplikacja jest dostępna pod adresem [https://asixrestdemo.azurewebsites.net](https://asixrestdemo.azurewebsites.net)
 
+# Wymagania
+Aby móc skompilować projekt należy zainstalować [Visual Studio 2017](https://visualstudio.microsoft.com/pl/downloads) oraz [.NET Core 2.2 SDK](https://dotnet.microsoft.com/download).
+
 # Description
-Examples of displaying process data of the Asix.Evo application in a Web application.
-The Web application is created using the Asp.Net MVC Core 2.2 technology.
+The Asix-AspNetMvcCore-Demo application contains examples of reading process data from the REST server of Asix.Evo application and presenting them on Web pages.
