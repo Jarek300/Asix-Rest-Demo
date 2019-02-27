@@ -5,6 +5,7 @@
 }
 
 
+@*Nagłówek strony*@
 <div class="jumbotron bg-light shadow-sm">
     <h1 class="display-4">Odczyt wartości zmiennych</h1>
 
@@ -15,12 +16,14 @@
 </div>
 
 
+@*Pierszy rząd kart z wartościami zmiennych. Wygląd karty jest określony w pliku _Demo3Variable.cshtml *@
 <div class="card-deck py-3">
     <partial name="_Demo3Variable" model="Model.mVariableModelA000" />
     <partial name="_Demo3Variable" model="Model.mVariableModelA004" />
     <partial name="_Demo3Variable" model="Model.mVariableModelA008" />
 </div>
 
+@*Drugi rząd kart z wartościami zmiennych*@
 <div class="card-deck py-3">
     <partial name="_Demo3Variable" model="Model.mVariableModelA082" />
     <partial name="_Demo3Variable" model="Model.mVariableModelA084" />
