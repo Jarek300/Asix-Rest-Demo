@@ -5,20 +5,25 @@
 }
 
 
+@*Nagłówek strony*@
 <div class="jumbotron bg-light shadow-sm">
     <h1 class="display-4">Odświeżanie wartości zmiennych</h1>
 </div>
 
-
+@*DIV o nazwie 'deck' jest kontenerem zawierającym wizualizację wszystkich zmiennych*@
 <div id="deck">
+    @*Wizualizacja zmiennych jest zdefiniowana w pliku _Demo1VariableDeck.cshtml*@
     <partial name="_Demo1VariableDeck" model="@Model.mVariableModelList.ToArray()" />
 </div>
 
 
 @section scripts{
     <script>
+        //Periodyczne wywoływanie funkcji refreshVariables
         setInterval(refreshVariables, 2000);
 
+        //Funkcja Javascript refreshVariables wywołuje funkcję po stronie serwera o nazwie OnGetVariableDeck, 
+        // wynik w postaci hodu HTML wstawia do kontenera o nazwie 'deck'
         function refreshVariables() {
             $('#deck').load('Demo1?handler=VariableDeck');
         }

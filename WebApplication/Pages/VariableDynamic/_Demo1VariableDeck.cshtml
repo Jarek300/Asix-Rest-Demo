@@ -1,12 +1,14 @@
 ﻿@model WebApplication.Pages.VariableDynamic.VariableModel[]
 
 
+@*Pierszy rząd kart z wartościami zmiennych. Wygląd karty jest określony w pliku _Demo1Variable.cshtml *@
 <div class="card-deck py-3">
     <partial name="_Demo1Variable" model="@Model[0]" />
     <partial name="_Demo1Variable" model="@Model[1]" />
     <partial name="_Demo1Variable" model="@Model[2]" />
 </div>
 
+@*Drugi rząd kart z wartościami zmiennych*@
 <div class="card-deck py-3">
     <partial name="_Demo1Variable" model="@Model[3]" />
     <partial name="_Demo1Variable" model="@Model[4]" />

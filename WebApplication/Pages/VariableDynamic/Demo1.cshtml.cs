@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace WebApplication.Pages.VariableDynamic
 {
+    /// <summary>
+    /// Klasa przechowująca model jednej zmiennej
+    /// </summary>
     public class VariableModel
     {
         public VariableModel(string aName, string aDecription, string aUnit)
@@ -16,12 +19,33 @@ namespace WebApplication.Pages.VariableDynamic
             mUnit = aUnit;
         }
 
+        /// <summary>
+        ///  Atrybuty zmiennej
+        /// </summary>
         public string mName, mDecription, mUnit;
-        public string mValueFormatted = "?", mReadError;
+
+        /// <summary>
+        /// Sformatowaną wartość zmiennej
+        /// </summary>
+        public string mValueFormatted = "?";
+
+        /// <summary>
+        /// Ewentualny błąd odczytu wartości zmiennej
+        /// </summary>
+        public string mReadError;
+
+        /// <summary>
+        /// Stemple czasu wartości zmiennej
+        /// </summary>
         public DateTime mDateTime;
     }
 
 
+
+    /// <summary>
+    /// Przykład odczytu wartości wielu zmiennych, wartości zmiennych są odświeżane bez przeładowywania strony.
+    /// Skrypt po stronie klienta periodycznie pobiera z serwera nowy stan kart zawierających wizualizację zmiennych (w postaci kodu HTML) i wstawia go do strony w przeglądarce
+    /// </summary>
     public class Demo1Model : PageModel
     {
         public List<VariableModel> mVariableModelList = new List<VariableModel>();
@@ -47,6 +71,9 @@ namespace WebApplication.Pages.VariableDynamic
 
 
 
+        /// <summary>
+        /// Funkcja wywoływana przy generowaniu strony. Czyta wartosci kolejny zmiennych.
+        /// </summary>
         public void OnGet()
         {
             ReadVariableValues();
@@ -54,6 +81,9 @@ namespace WebApplication.Pages.VariableDynamic
 
 
 
+        /// <summary>
+        /// Funkcja wywoływana przy odświeżaniu fragmentu strony. Czyta wartosci kolejny zmiennych i zwraca widok częsciowy zdefiniowany w pliku _Demo1VariableDeck.cshtml.
+        /// </summary>
         public PartialViewResult OnGetVariableDeck()
         {
             ReadVariableValues();
@@ -66,6 +96,9 @@ namespace WebApplication.Pages.VariableDynamic
 
 
 
+        /// <summary>
+        /// Odczyt wartości zmiennych
+        /// </summary>
         void ReadVariableValues()
         {
             ReadVariableValue(mVariableModelA000);
@@ -78,6 +111,9 @@ namespace WebApplication.Pages.VariableDynamic
         }
 
 
+        /// <summary>
+        /// Odczyt wartości jednej zmiennej
+        /// </summary>
         void ReadVariableValue(VariableModel aVariableModel)
         {
             try
