@@ -1,5 +1,7 @@
 ﻿@model WebApplication.Pages.Variable.Demo3VariableModel
 
+
+@*Funkcja pomocnicza - na podstawie informacji o przekroczniu limitu zwraca styl określający kolor tła pola wartości zmiennej*@
 @functions {
     string ValueLimitToStyle(ValueLimit aValueLimit)
     {
@@ -20,34 +22,44 @@
 }
 
 
+@*Karta wyświetlająca wynik odczytu wartości jednej zmiennej*@
 <div class="card bg-light shadow-sm" style="width: 18rem;">
 
+    @*Ewentualny bład odczytu wyświetlany jest w nagłówku karty*@
     @if (!string.IsNullOrEmpty(Model.mReadError))
     {
         <div class="card-header bg-danger text-white"><h5>Błąd odczytu</h5> @Model.mReadError</div>
     }
 
+    @*Ciało karty*@
     <div class="card-body">
+
+        @*Opis zmiennej*@
         <p>@Model.mDecription</p>
 
+        @*DIV wiersza zawierającego dwa pola - wartość zmiennej wyrównaną do lewej i ikonę trendu wyrównaną do prawej*@
         <div class="d-flex justify-content-between">
 
             <h3>
+                @*Wartość zmiennej z ustawionym odpowiednim kolorem tła*@
                 @if (Model.mValueQuality == ValueQuality.Good || Model.mValueQuality == ValueQuality.Uncertain)
                 {
                     <span style="@ValueLimitToStyle(Model.mValueLimit)"> @Model.mValueFormatted </span>
                 }
 
+                @*Dopisanie do wartości zmiennej znaku ? dla jakości złej*@
                 @if (Model.mValueQuality == ValueQuality.Uncertain)
                 {
                     @:?
                 }
 
+                @*Znak ?? sygnalizujący jakość złą*@
                 @if (Model.mValueQuality == ValueQuality.Bad)
                 {
                     @:??
                 }
 
+                @*Jednostka wartości zmienej*@
                 @if (Model.mValueQuality == ValueQuality.Good || Model.mValueQuality == ValueQuality.Uncertain)
                 {
                     @Model.mUnit
@@ -55,16 +67,20 @@
             </h3>
 
 
+            @*Ikona sygnalizująca trend zmian wartości zmiennej. Używa jest biblioteka ikon Font Awesome w formacie SVG*@
             @if (Model.mValueTrend == ValueTrend.Up)
             {
+                //Zielona strzałka skierowana w górę
                 <i class="fas fa-caret-up fa-2x" data-fa-transform="grow-32 left-6 up-3" style="color:green"></i>
             }
             else if (Model.mValueTrend == ValueTrend.Down)
             {
+                //Czerwona strzałka skierowana w dół
                 <i class="fas fa-caret-down fa-2x" data-fa-transform="grow-32 left-6 up-3" style="color:red"></i>
             }
             else if (Model.mValueTrend == ValueTrend.NoChange)
             {
+                //Niebieski pasek
                 <i class="fas fa-minus fa-2x" data-fa-transform="grow-26 left-6 up-0" style="color:blue"></i>
             }
             else
@@ -76,7 +92,8 @@
 
     </div>
 
+    @*Stopka karty - w celach informacyjnych wyświetla nazwę zmiennej*@
     <div class="card-footer py-0 text-right">
-        <small class="text-muted">@Model.mName @Model.mValueLimit</small>
+        <small class="text-muted">@Model.mName</small>
     </div>
 </div>
