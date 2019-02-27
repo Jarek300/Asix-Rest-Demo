@@ -1,5 +1,5 @@
 ﻿# Opis
-[Asix.Evo](https://www.asix.com.pl) firmy [Askom](https://www.askom.pl) jest pakietem programowym klasy HMI/SCADA/MES umożliwiającym realizację komputerowych systemów wizualizacji, nadzoru i sterowania procesów przemysłowych.  Asix.Evo  ma możliwość udostępniania danych procesowych aplikacji za pośrednictwem serwera REST. Opis serwera REST jest dostepny [tutaj](https://www.askom.pl/WebHelp/Asix_Evo_9/AsixConnect_HTML5/index.htm#t=Serwer_REST_pakietu_Asix_Evo%2FHistoria_alarmow.htm).
+[Asix.Evo](https://www.asix.com.pl) firmy [Askom](https://www.askom.pl) jest pakietem programowym klasy HMI/SCADA/MES umożliwiającym realizację komputerowych systemów wizualizacji, nadzoru i sterowania procesów przemysłowych. Asix.Evo  ma możliwość udostępniania danych procesowych aplikacji za pośrednictwem serwera REST. Opis serwera REST jest dostepny [tutaj](https://www.askom.pl/WebHelp/Asix_Evo_9/AsixConnect_HTML5/index.htm#t=Serwer_REST_pakietu_Asix_Evo%2FHistoria_alarmow.htm).
 
 Projekt **Asix-AspNetMvcCore-Demo** zawiera przykłady pobierania danych procesowych z aplikacji Asix.Evo i wyświetlania ich na stronach Web. Aplikacja Web jest stworzona przy pomocy technologii Asp.Net MVC Core 2.2. Aby móc skompilować projekt należy zainstalować [Visual Studio 2017](https://visualstudio.microsoft.com/pl/downloads) oraz [.NET Core 2.2 SDK](https://dotnet.microsoft.com/download).
 
@@ -18,6 +18,7 @@ Zawartość projektu:
  * Alarm/Demo2 - Odczyt wartości historycznych z archiwum alarmów
  * AsixRestClient.cs - Klasa pomocnicza realizująca odczyt danych z serwera REST.
 
+Działająca aplikacja jest dostępna pod adresem [https://asixrestdemo.azurewebsites.net](https://asixrestdemo.azurewebsites.net)
 
 # Description
 Examples of displaying process data of the Asix.Evo application in a Web application.
