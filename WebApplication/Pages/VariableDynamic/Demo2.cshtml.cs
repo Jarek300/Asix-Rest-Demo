@@ -57,7 +57,7 @@ namespace WebApplication.Pages.VariableDynamic
         /// Odczyt wartości bieżącej zmiennych
         /// </summary>
         /// <param name="name">Nazwa zmiennej, może wystapić wielokrotnie</param>
-        /// <returns></returns>
+        /// <returns>Json zawierający tablicę obiektów VariableModel</returns>
         public JsonResult OnGetVariables(string[] name)
         {
             if (name == null)
