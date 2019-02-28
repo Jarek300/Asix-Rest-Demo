@@ -13,9 +13,8 @@
   },
   "profiles": {
     "IIS Express": {
-      "commandName": "IIS",
+      "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "Alarm/Demo1",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
