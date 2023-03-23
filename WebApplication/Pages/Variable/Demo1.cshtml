@@ -18,10 +18,10 @@
 
 
 @*Obsługa błędów*@
-@if (!string.IsNullOrEmpty(Model.mReadError))
+@if (!string.IsNullOrEmpty(Model.VariableModel.ReadError))
 {
     <div class="alert alert-danger" role="alert">
-        Błąd odczytu: @Model.mReadError;
+        Błąd odczytu: @Model.VariableModel.ReadError;
     </div>
 
     return;
@@ -31,7 +31,7 @@
 @*Karta wyświetlająca sformatowaną wartość zmiennej*@
 <div class="card bg-light shadow-sm " style="width: 18rem;">
     <div class="card-body">
-        <p>Przepływ gazu do pieca</p>
-        <h3>@Model.mValueFormatted m³/h</h3>
+        <p>@Model.VariableModel.Decription</p>
+        <h3>@Model.VariableModel.ValueFormatted @Model.VariableModel.Unit</h3>
     </div>
 </div>
