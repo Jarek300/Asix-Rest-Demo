@@ -13,7 +13,7 @@
 
     <ItemGroup>
         <OpenApiReference Include="AsixRestServer.json" CodeGenerator="NSwagCSharp" Namespace="Asix" ClassName="AsixRestClient"
-                          Options="/ArrayType:System.Collections.Generic.IReadOnlyList"/>
+                          Options="/ArrayType:System.Collections.Generic.IList /ResponseArrayType:System.Collections.Generic.IList  /DateTime:System.DateTime /DateTimeType:System.DateTime"/>
     </ItemGroup>
 
     <ItemGroup>

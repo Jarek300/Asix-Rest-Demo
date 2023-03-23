@@ -2,46 +2,10 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Asix;
-
+using WebApplication.Code;
 
 namespace WebApplication.Pages.VariableDynamic
 {
-    /// <summary>
-    /// Klasa przechowująca model jednej zmiennej
-    /// </summary>
-    public class VariableModel
-    {
-        public VariableModel(string aName, string aDecription, string aUnit)
-        {
-            mName = aName;
-            mDecription = aDecription;
-            mUnit = aUnit;
-        }
-
-        /// <summary>
-        ///  Atrybuty zmiennej
-        /// </summary>
-        public string mName { get; set; }
-        public string mDecription { get; set; }
-        public string mUnit { get; set; }
-
-        /// <summary>
-        /// Sformatowaną wartość zmiennej
-        /// </summary>
-        public string mValueFormatted { get; set; } = "?";
-
-        /// <summary>
-        /// Ewentualny błąd odczytu wartości zmiennej
-        /// </summary>
-        public string mReadError { get; set; } = "";
-
-        /// <summary>
-        /// Stemple czasu wartości zmiennej
-        /// </summary>
-        public DateTimeOffset mDateTime { get; set; }
-    }
-
-
 
     /// <summary>
     /// Przykład odczytu wartości wielu zmiennych, wartości zmiennych są odświeżane bez przeładowywania strony.
@@ -50,24 +14,16 @@ namespace WebApplication.Pages.VariableDynamic
     public class Demo1Model : PageModel
     {
         public List<VariableModel> mVariableModelList = new List<VariableModel>();
-        public VariableModel mVariableModelA000 = new VariableModel("A000", "Temperatura spalin przed odemglaczem", "°C");
-        public VariableModel mVariableModelA004 = new VariableModel("A004", "Temperatura kwasu siarkowego", "°C");
-        public VariableModel mVariableModelA008 = new VariableModel("A008", "Temperatura wody ciepłej", "°C");
-
-        public VariableModel mVariableModelA082 = new VariableModel("A082", "Przepływ kwasu siarkowego", "m³/h");
-        public VariableModel mVariableModelA084 = new VariableModel("A084", "Poziom w zb. cyrkulacyjnym kwasu", "%");
-        public VariableModel mVariableModelA086 = new VariableModel("A086", "Przepływ wody chłodzącej", "m³/h");
-
 
 
         public Demo1Model()
         {
-            mVariableModelList.Add(mVariableModelA000);
-            mVariableModelList.Add(mVariableModelA004);
-            mVariableModelList.Add(mVariableModelA008);
-            mVariableModelList.Add(mVariableModelA082);
-            mVariableModelList.Add(mVariableModelA084);
-            mVariableModelList.Add(mVariableModelA086);
+            mVariableModelList.Add(new VariableModel("A000", "Temperatura spalin przed odemglaczem", "°C"));
+            mVariableModelList.Add(new VariableModel("A004", "Temperatura kwasu siarkowego", "°C"));
+            mVariableModelList.Add(new VariableModel("A008", "Temperatura wody ciepłej", "°C"));
+            mVariableModelList.Add(new VariableModel("A082", "Przepływ kwasu siarkowego", "m³/h"));
+            mVariableModelList.Add(new VariableModel("A084", "Poziom w zb. cyrkulacyjnym kwasu", "%"));
+            mVariableModelList.Add(new VariableModel("A086", "Przepływ wody chłodzącej", "m³/h"));
         }
 
 
@@ -89,12 +45,12 @@ namespace WebApplication.Pages.VariableDynamic
         {
             await ReadVariableValues();
 
-            return new PartialViewResult {
+            return new PartialViewResult
+            {
                 ViewName = "_Demo1VariableDeck",
                 ViewData = new ViewDataDictionary<VariableModel[]>(ViewData, mVariableModelList.ToArray())
             };
         }
-
 
 
         /// <summary>
@@ -102,62 +58,23 @@ namespace WebApplication.Pages.VariableDynamic
         /// </summary>
         async Task ReadVariableValues()
         {
-            await ReadVariableValue(mVariableModelA000);
-            await ReadVariableValue(mVariableModelA004);
-            await ReadVariableValue(mVariableModelA008);
-
-            await ReadVariableValue(mVariableModelA082);
-            await ReadVariableValue(mVariableModelA084);
-            await ReadVariableValue(mVariableModelA086);
-        }
-
-
-        /// <summary>
-        /// Odczyt wartości jednej zmiennej
-        /// </summary>
-        async Task ReadVariableValue(VariableModel aVariableModel)
-        {
             try
             {
                 AsixRestClient asixRestClient = AsixRestClient.Create();
-                ICollection<VariableValue> VariableValues = await asixRestClient.GetVariableValueAsync(new string[] { aVariableModel.mName });
-                VariableValue variableState = VariableValues.First();
+                string[] variableNames = mVariableModelList.Select(x => x.Name).ToArray();
+                IList<VariableValue> variableValues = await asixRestClient.GetVariableValueAsync(variableNames);
 
-                if (!variableState.ReadSucceeded)
+                for (int i = 0; i < mVariableModelList.Count; i++)
                 {
-                    aVariableModel.mReadError = variableState.ReadStatusString;
-                    return;
-                }
-
-
-                aVariableModel.mDateTime = variableState.TimeStamp;
-
-                switch (variableState.Quality & 0xC0)
-                {
-                    case 0xC0:
-                    {
-                        double value = (double)variableState.Value;
-                        aVariableModel.mValueFormatted = value.ToString("F0");
-                        break;
-                    }
-
-                    case 0x40:
-                    {
-                        double value = (double)variableState.Value;
-                        aVariableModel.mValueFormatted = value.ToString("F0") + "?";
-                        break;
-                    }
-
-                    default:
-                    {
-                        aVariableModel.mValueFormatted = "?";
-                        break;
-                    }
+                    mVariableModelList[i].SetVariableValue(variableValues[i]);
                 }
             }
             catch (Exception e)
             {
-                aVariableModel.mReadError = e.Message;
+                for (int i = 0; i < mVariableModelList.Count; i++)
+                {
+                    mVariableModelList[i].ReadError = e.Message;
+                }
             }
         }
     }

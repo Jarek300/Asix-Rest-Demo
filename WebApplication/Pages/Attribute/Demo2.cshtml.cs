@@ -42,7 +42,7 @@ namespace WebApplication.Pages.Attribute
 
 
                 // Odczyt z serwera REST wartości atrybutów atrybutów zmiennej
-                ICollection<ICollection<string>> variableAttributes = await asixRestClient.GetVariableAttributeAsync(new string[] { mVariableName }, mAttributeNames);
+                IList<IList<string>> variableAttributes = await asixRestClient.GetVariableAttributeAsync(new string[] { mVariableName }, mAttributeNames);
                 mVariableAttributes = variableAttributes.First().ToList();
             }
             catch (Exception e)

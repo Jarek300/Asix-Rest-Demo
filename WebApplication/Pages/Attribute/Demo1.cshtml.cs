@@ -38,8 +38,8 @@ namespace WebApplication.Pages.Attribute
             try
             {
                 AsixRestClient asixRestClient = AsixRestClient.Create();
-                ICollection<ICollection<string>> variableAttributesCollection = await asixRestClient.GetVariableAttributeAsync(new string[] { mVariableName }, mAttributeNameList);
-                ICollection<string>? variableAttributes = variableAttributesCollection.FirstOrDefault();
+                IList<IList<string>> variableAttributesCollection = await asixRestClient.GetVariableAttributeAsync(new string[] { mVariableName }, mAttributeNameList);
+                IList<string>? variableAttributes = variableAttributesCollection.FirstOrDefault();
 
                 if (variableAttributes != null)
                 {

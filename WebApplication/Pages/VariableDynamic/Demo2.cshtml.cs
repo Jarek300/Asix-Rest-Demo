@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Asix;
+using WebApplication.Code;
 
 namespace WebApplication.Pages.VariableDynamic
 {
@@ -58,63 +59,52 @@ namespace WebApplication.Pages.VariableDynamic
         {
             List<VariableModel> variables = new List<VariableModel>();
 
-            if (name == null)
-                return new JsonResult(variables.ToArray());
-
-            foreach (string variableName in name)
-            {
-                VariableModel variableModel;
-                if (!mVariables.ContainsKey(variableName))
-                    variableModel = new VariableModel(variableName, "", "");
-                else
-                    variableModel = mVariables[variableName];
-
-                await ReadVariableValue(variableModel);
-                variables.Add(variableModel);
-            }
-
-            return new JsonResult(variables.ToArray());
-        }
-
-
-        async Task ReadVariableValue(VariableModel aVariableModel)
-        {
             try
             {
+                if (name == null)
+                    return new JsonResult(variables.ToArray());
+
                 AsixRestClient asixRestClient = AsixRestClient.Create();
-                ICollection<VariableValue> variableStates = await asixRestClient.GetVariableValueAsync(new string[] { aVariableModel.mName });
-                VariableValue variableState = variableStates.First();
+                IList<VariableValue> variableValues = await asixRestClient.GetVariableValueAsync(name);
 
-                aVariableModel.mDateTime = variableState.TimeStamp;
-
-                switch (variableState.Quality & 0xC0)
+                for (int i = 0; i < name.Length; i++)
                 {
-                    case 0xC0:
-                        {
-                            double value = (double)variableState.Value;
-                            aVariableModel.mValueFormatted = value.ToString("F0");
-                            break;
-                        }
+                    VariableModel variableModel;
 
-                    case 0x40:
-                        {
-                            double value = (double)variableState.Value;
-                            aVariableModel.mValueFormatted = value.ToString("F0") + "?";
-                            break;
-                        }
+                    if (!mVariables.ContainsKey(name[i]))
+                        variableModel = new VariableModel(name[i], "", "");
+                    else
+                        variableModel = mVariables[name[i]];
 
-                    default:
-                        {
-                            aVariableModel.mValueFormatted = "?";
-                            break;
-                        }
+                    variableModel.SetVariableValue(variableValues[i]);
+                    variables.Add(variableModel);
                 }
+
+                return new JsonResult(variables.ToArray());
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                aVariableModel.mReadError = e.Message;
+                string message = ex.Message;
+                if (ex.InnerException != null)
+                    message += " " + ex.InnerException.Message;
+
+                for (int i = 0; i < name.Length; i++)
+                {
+                    VariableModel variableModel;
+
+                    if (!mVariables.ContainsKey(name[i]))
+                        variableModel = new VariableModel(name[i], "", "");
+                    else
+                        variableModel = mVariables[name[i]];
+
+                    variableModel.SetError(ex.Message);
+                    variables.Add(variableModel);
+                }
+
+
+                return new JsonResult(variables.ToArray());
+
             }
         }
-
     }
 }

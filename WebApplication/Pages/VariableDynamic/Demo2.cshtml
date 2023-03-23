@@ -44,22 +44,26 @@
 
             $.get(ajaxRequest, function (data) {
                 for (i = 0; i < data.length; i++)
-                    updateView(data[i].mName, data[i]);
+                    updateView(data[i].name, data[i]);
             });
         }
 
 
         function updateView(idView, variableModel) {
-            if (variableModel.mReadError) {
-                $("#" + idView + " #error").text(variableModel.mReadError);
+            console.log(idView, variableModel);
+
+            if (variableModel.readError) {
+                console.log("read error");
+
+                $("#" + idView + " #error").text(variableModel.readError);
                 $("#" + idView + " #error").show();
             } else {
                 $("#" + idView + " #error").hide();
             }
 
-            $("#" + idView + " #description").text(variableModel.mDecription);
-            $("#" + idView + " #value").text(variableModel.mValueFormatted + ' ' + variableModel.mUnit);
-            $("#" + idView + " #info").text(variableModel.mName + ', ' + variableModel.mDateTime);
+            $("#" + idView + " #description").text(variableModel.decription);
+            $("#" + idView + " #value").text(variableModel.valueFormatted + ' ' + variableModel.unit);
+            $("#" + idView + " #info").text(variableModel.name + ', ' + variableModel.dateTime);
         }
 
         refreshVariables();
