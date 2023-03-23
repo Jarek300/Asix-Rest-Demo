@@ -182,5 +182,11 @@ namespace WebApplication.Pages.Variable
             else
                 ValueTrend = ValueTrend.Up;
         }
+
+
+        internal void SetError(string aErrorMessage)
+        {
+            ReadError = aErrorMessage;
+        }
     }
 }

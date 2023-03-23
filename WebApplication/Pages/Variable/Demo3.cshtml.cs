@@ -10,63 +10,66 @@ namespace WebApplication.Pages.Variable
     /// </summary>
     public class Demo3Model : PageModel
     {
-        public Demo3VariableModel mVariableModelA000 = new Demo3VariableModel("A000", "Temperatura spalin przed odemglaczem", "°C", "F0", 2, 10, 190, 200);
-        public Demo3VariableModel mVariableModelA004 = new Demo3VariableModel("A004", "Temperatura kwasu siarkowego", "°C", "F0", 2, 10, 190, 200);
-        public Demo3VariableModel mVariableModelA008 = new Demo3VariableModel("A008", "Temperatura wody ciepłej", "°C", "F1", 1, 8, 90, 98);
+        public List<Demo3VariableModel> mVariableModelList = new();
 
-        public Demo3VariableModel mVariableModelA082 = new Demo3VariableModel("A082", "Przepływ kwasu siarkowego", "m³/h", "F0", 2, 10, 190, 200);
-        public Demo3VariableModel mVariableModelA084 = new Demo3VariableModel("A084", "Poziom w zb. cyrkulacyjnym kwasu", "%", "F1", 2, 10, 190, 200);
-        public Demo3VariableModel mVariableModelA086 = new Demo3VariableModel("A086", "Przepływ wody chłodzącej", "m³/h", "F0", 2, 10, 270, 290);
+        public Demo3VariableModel mVariableModelA000 = new("A000", "Temperatura spalin przed odemglaczem", "°C", "F0", 2, 10, 190, 200);
+        public Demo3VariableModel mVariableModelA004 = new("A004", "Temperatura kwasu siarkowego", "°C", "F0", 2, 10, 190, 200);
+        public Demo3VariableModel mVariableModelA008 = new("A008", "Temperatura wody ciepłej", "°C", "F1", 1, 8, 90, 98);
+        public Demo3VariableModel mVariableModelA082 = new("A082", "Przepływ kwasu siarkowego", "m³/h", "F0", 2, 10, 190, 200);
+        public Demo3VariableModel mVariableModelA084 = new("A084", "Poziom w zb. cyrkulacyjnym kwasu", "%", "F1", 2, 10, 190, 200);
+        public Demo3VariableModel mVariableModelA086 = new("A086", "Przepływ wody chłodzącej", "m³/h", "F0", 2, 10, 270, 290);
+        public Demo3VariableModel mVariableModelUnknown = new("UnknownVariable", "UnknownVariable - desc", "m³/h", "F0", 2, 10, 270, 290);
 
-        public Demo3VariableModel mVariableModelUnknown = new Demo3VariableModel("UnknownVariable", "UnknownVariable - desc", "m³/h", "F0", 2, 10, 270, 290);
 
-
-        /// <summary>
-        /// Funkcja wywoływana przy generowaniu strony. Czyta wartosci kolejny zmiennych.
-        /// </summary>
-        public async Task OnGet()
+        public Demo3Model()
         {
-            await ReadVariableValue(mVariableModelA000);
-            await ReadVariableValue(mVariableModelA004);
-            await ReadVariableValue(mVariableModelA008);
-
-            await ReadVariableValue(mVariableModelA082);
-            await ReadVariableValue(mVariableModelA084);
-            await ReadVariableValue(mVariableModelA086);
-
-            await ReadVariableValue(mVariableModelUnknown);
+            mVariableModelList.Add(mVariableModelA000);
+            mVariableModelList.Add(mVariableModelA004);
+            mVariableModelList.Add(mVariableModelA008);
+            mVariableModelList.Add(mVariableModelA082);
+            mVariableModelList.Add(mVariableModelA084);
+            mVariableModelList.Add(mVariableModelA086);
+            mVariableModelList.Add(mVariableModelUnknown);
         }
 
 
         /// <summary>
+        /// Funkcja wywoływana przy generowaniu strony. Czyta wartosci kolejny zmiennych.
         /// Odczyt wartości bieżącej i średniej jednej zmiennej
         /// </summary>
-        /// <param name="aVariableModel">Model zmiennej. Jego pole mName zawiera nazwę zmiennej.</param>
-        async Task ReadVariableValue(Demo3VariableModel aVariableModel)
+        public async Task OnGet()
         {
             try
             {
                 AsixRestClient asixRestClient = AsixRestClient.Create();
 
-                // Odczyt wartości zmiennej z serwera REST
-                ICollection<VariableValue> variableValues = await asixRestClient.GetVariableValueAsync(new string[] { aVariableModel.Name });
-                VariableValue variableValue = variableValues.First();
-
-                if (!aVariableModel.SetValue(variableValue))
-                    return;
-
+                // Odczyt wartości zmiennych z serwera REST
+                string[] variableNames = mVariableModelList.Select(x => x.Name).ToArray();
+                IList<VariableValue> variableValues = await asixRestClient.GetVariableValueAsync(variableNames);
 
                 // Odczyt średniej wartości zmiennej z serwera REST
-                ICollection<VariableValue> variableAverages = await asixRestClient.GetVariableAggregateAsync(aVariableModel.Name, "Average", "15m", null, null, "60S");
+                AggregateRange[] aggregateRanges = mVariableModelList.Select(x => new AggregateRange(x.Name, "Average", "15m", "60S")).ToArray();
+                IList<VariableValue> variableAverages = await asixRestClient.PostGetVariableAggregateAsync(aggregateRanges);
 
-                VariableValue variableAverage = variableAverages.First();
 
-                // wypracowanie przez klasę modelu informacji o trendzie zmian wartości zmiennej
-                aVariableModel.SetValueTrend(variableAverage);
+                for (int i = 0; i < mVariableModelList.Count; i++)
+                {
+                    Demo3VariableModel aVariableModel = mVariableModelList[i];
+
+                    VariableValue variableValue = variableValues[i];
+                    aVariableModel.SetValue(variableValue);
+
+                    VariableValue variableAverage = variableAverages[i];
+                    aVariableModel.SetValueTrend(variableAverage);
+                }
             }
             catch (Exception e)
             {
-                aVariableModel.ReadError = e.Message;
+                for (int i = 0; i < mVariableModelList.Count; i++)
+                {
+                    Demo3VariableModel aVariableModel = mVariableModelList[i];
+                    aVariableModel.SetError(e.Message);
+                }
             }
         }
     }

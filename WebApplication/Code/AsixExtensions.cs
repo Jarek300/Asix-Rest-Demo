@@ -35,5 +35,16 @@ public partial class AsixRestClient
     {
         return (aQuality & 0xC0) == 0;
     }
+}
 
+
+public partial class AggregateRange
+{
+    public AggregateRange(string aName, string aAggregate, string aPeriodLength, string aRefreshInterval)
+    {
+        Name = aName;
+        Aggregate = aAggregate;
+        PeriodLength = aPeriodLength;
+        RefreshInterval = aRefreshInterval;
+    }
 }
