@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Asix;
 
 
 namespace WebApplication.Pages.Alarm
@@ -10,14 +9,13 @@ namespace WebApplication.Pages.Alarm
     /// </summary>
     public class AlarmModel
     {
-        public AlarmModel(string aDomain, string aName)
-        {
-            mDomain = aDomain;
-            mName = aName;
-        }
+        public string Name;
+        public Asix.AlarmState AlarmState = new AlarmState();
 
-        public string mDomain, mName;
-        public AlarmState mAlarmState;
+        public AlarmModel(string aName)
+        {
+            Name = aName;
+        }
     }
 
 
@@ -33,39 +31,47 @@ namespace WebApplication.Pages.Alarm
 
 
         /// <summary>
-        /// Konstruktor klasy modelu strony 
+        /// Konstruktor klasy modelu strony
         /// </summary>
         public Demo1Model()
         {
-            mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm nr 011"));
-            mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm nr 083"));
-            mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm nr 098"));
-            mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm nr 109"));
-            mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm nr 155"));
-            mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm nr 202"));
-            mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm nr 227"));
-            mAlarmModelList.Add(new AlarmModel("Fabryka_EVO", "Alarm_AAA"));     // nieistniejąca nazwa alarmu, demonstruje obsługę błędu odczytu alarmu
+            mAlarmModelList.Add(new AlarmModel("Alarm nr 011"));
+            mAlarmModelList.Add(new AlarmModel("Alarm nr 083"));
+            mAlarmModelList.Add(new AlarmModel("Alarm nr 098"));
+            mAlarmModelList.Add(new AlarmModel("Alarm nr 109"));
+            mAlarmModelList.Add(new AlarmModel("Alarm nr 155"));
+            mAlarmModelList.Add(new AlarmModel("Alarm nr 202"));
+            mAlarmModelList.Add(new AlarmModel("Alarm nr 227"));
+            mAlarmModelList.Add(new AlarmModel("Alarm_AAA"));     // nieistniejąca nazwa alarmu, demonstruje obsługę błędu odczytu alarmu
         }
 
 
         /// <summary>
         /// Funkcja wywoływana przy pobieraniu strony przez przeglądarkę
         /// </summary>
-        public void OnGet()
+        public async Task OnGet()
         {
-            ReadAlarmValue();
+            await ReadAlarmValue();
         }
 
 
         /// <summary>
         /// Funkcja realizująca odczyt stanu alarmów
         /// </summary>
-        void ReadAlarmValue()
+        async Task ReadAlarmValue()
         {
-            AsixRestClient asixRestClient = new AsixRestClient();
+            AsixRestClient asixRestClient = AsixRestClient.Create();
 
-            foreach (var alarmModel in mAlarmModelList)
-                alarmModel.mAlarmState = asixRestClient.ReadAlarmState(alarmModel.mDomain, alarmModel.mName);
+            IEnumerable<string> alarmNames = mAlarmModelList.Select(x => x.Name);
+            ICollection<AlarmState> alarmStates = await asixRestClient.GetAlarmsStateAsync(AsixRestClient.AlarmDomainName, alarmNames);
+            AlarmState[] alarmStatesArray = alarmStates.ToArray();
+
+            for (int i = 0; i < mAlarmModelList.Count; i++)
+            {
+                AlarmModel alarmModel = mAlarmModelList[i];
+                AlarmState alarmState = alarmStatesArray[i];
+                alarmModel.AlarmState = alarmState;
+            }
         }
     }
 }

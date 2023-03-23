@@ -1,7 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Asix;
 
 
 namespace WebApplication.Pages.Archive
@@ -12,26 +12,26 @@ namespace WebApplication.Pages.Archive
         [DataType(DataType.DateTime)]
         public DateTime DateReadTime { get; set; } = DateTime.Today;
 
-        public VariableRawArchive mVariableRawArchiveA000;
+        public ReadRawResult mVariableRawArchiveA000 = new();
 
 
-        public void OnGet()
+        public async Task OnGet()
         {
-            ReadData();
+            await ReadData();
         }
 
 
-        public void OnPost()
+        public async Task OnPost()
         {
-            ReadData();
+            await ReadData();
         }
 
 
-        void ReadData()
-        {           
-            AsixRestClient asixRestClient = new AsixRestClient();
+        async Task ReadData()
+        {
+            AsixRestClient asixRestClient = AsixRestClient.Create();
             string periodStartOpc = DateReadTime.ToString("o");   // format ISO, też obsługiwany przez REST server
-            mVariableRawArchiveA000 = asixRestClient.ReadVariableRawArchive("A000", periodStartOpc, "1H");
+            mVariableRawArchiveA000 = await asixRestClient.GetVariableArchiveRawAsync("A000", periodStartOpc, "1H", null, null, null, null);
         }
     }
 }

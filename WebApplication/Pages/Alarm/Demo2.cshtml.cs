@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Asix;
 
 namespace WebApplication.Pages.Alarm
 {
@@ -31,28 +30,30 @@ namespace WebApplication.Pages.Alarm
         };
 
 
-        public HistAlarmArchive mHistAlarmArchive;
+        public HistoricalAlarmsReadResult mHistAlarmArchive = new();
 
 
         // Wywoływane przy ładowaniu strony
-        public void OnGet()
+        public async Task OnGet()
         {
-            ReadData();
+            await ReadData();
         }
 
 
         // Wywoływane po naciśnięciu na stronie przycisku 'Odśwież'
-        public void OnPost()
+        public async Task OnPost()
         {
-            ReadData();
+            await ReadData();
         }
 
 
         // Odczyt z archiwum alarmów
-        void ReadData()
+        async Task ReadData()
         {
-            AsixRestClient asixRestClient = new AsixRestClient();
-            mHistAlarmArchive = asixRestClient.ReadHistAlarmArchive("Fabryka_EVO", DateReadTime, TimeSpan.Parse(PeriodLength));
+            AsixRestClient asixRestClient = AsixRestClient.Create();
+            mHistAlarmArchive = await asixRestClient.GetAlarmArchiveSequenceAsync(
+                AsixRestClient.AlarmDomainName, DateReadTime.ToString("o"), TimeSpan.Parse(PeriodLength).ToString(),
+                Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>(), null, null, null, null);
         }
     }
 }

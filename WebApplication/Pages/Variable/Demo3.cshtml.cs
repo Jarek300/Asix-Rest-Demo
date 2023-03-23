@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Asix;
 
 
 namespace WebApplication.Pages.Variable
@@ -57,7 +57,7 @@ namespace WebApplication.Pages.Variable
         /// <summary>
         /// Ewentualny błąd odczytu wartości zmiennej
         /// </summary>
-        public string mReadError;
+        public string mReadError = "";
 
         /// <summary>
         /// Jakość zmiennej
@@ -72,7 +72,7 @@ namespace WebApplication.Pages.Variable
         /// <summary>
         /// Sformatowana wartość średniej zmiennej za ostatnie 15 minut
         /// </summary>
-        public string mAverageValueFormatted;
+        public string mAverageValueFormatted = "";
 
         /// <summary>
         /// Trend zmian wartości zmiennej
@@ -89,7 +89,7 @@ namespace WebApplication.Pages.Variable
         /// Tworzenie modelu zmiennej - analiza jakośći wartość zmienej
         /// </summary>
         /// <param name="aOpcQuality">Jakość zmiennej</param>
-        public void SetValueQuality(uint aOpcQuality)
+        public void SetValueQuality(int aOpcQuality)
         {
             switch (aOpcQuality & 0xC0)
             {
@@ -104,7 +104,7 @@ namespace WebApplication.Pages.Variable
                 default:
                     mValueQuality = ValueQuality.Bad;
                     break;
-            }               
+            }
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace WebApplication.Pages.Variable
 
 
         /// <summary>
-        /// Tworzenie modelu zmiennej - analiza wartości wartość zmienej bieżącej i średniej - określenie trendu zmian wartości 
+        /// Tworzenie modelu zmiennej - analiza wartości wartość zmienej bieżącej i średniej - określenie trendu zmian wartości
         /// </summary>
         /// <param name="aValue">Wartość bieżąca zmiennej</param>
         /// <param name="aAverageValue">Wartość średnia zmiennej</param>
@@ -172,15 +172,15 @@ namespace WebApplication.Pages.Variable
         /// <summary>
         /// Funkcja wywoływana przy generowaniu strony. Czyta wartosci kolejny zmiennych.
         /// </summary>
-        public void OnGet()
+        public async Task OnGet()
         {
-            ReadVariableValue(mVariableModelA000);
-            ReadVariableValue(mVariableModelA004);
-            ReadVariableValue(mVariableModelA008);
+            await ReadVariableValue(mVariableModelA000);
+            await ReadVariableValue(mVariableModelA004);
+            await ReadVariableValue(mVariableModelA008);
 
-            ReadVariableValue(mVariableModelA082);
-            ReadVariableValue(mVariableModelA084);
-            ReadVariableValue(mVariableModelA086);
+            await ReadVariableValue(mVariableModelA082);
+            await ReadVariableValue(mVariableModelA084);
+            await ReadVariableValue(mVariableModelA086);
         }
 
 
@@ -224,40 +224,42 @@ namespace WebApplication.Pages.Variable
         /// Odczyt wartości bieżącej i średniej jednej zmiennej
         /// </summary>
         /// <param name="aVariableModel">Model zmiennej. Jego pole mName zawiera nazwę zmiennej.</param>
-        void ReadVariableValue(Demo3VariableModel aVariableModel)
+        async Task ReadVariableValue(Demo3VariableModel aVariableModel)
         {
             try
             {
-                AsixRestClient asixRestClient = new AsixRestClient();
+                AsixRestClient asixRestClient = AsixRestClient.Create();
 
                 // Odczyt wartości zmiennej z serwera REST
-                VariableState variableState = asixRestClient.ReadVariableState(aVariableModel.mName);
-                if (!variableState.readSucceeded)
+                ICollection<VariableValue> variableValues = await asixRestClient.GetVariableValueAsync(new string[] { aVariableModel.mName });
+                VariableValue variableValue = variableValues.First();
+                if (!variableValue.ReadSucceeded)
                 {
-                    aVariableModel.mReadError = variableState.readStatusString;
+                    aVariableModel.mReadError = variableValue.ReadStatusString;
                     return;
                 }
 
 
                 // wypracowanie przez klasę modelu informacji o jakości zmiennej
-                aVariableModel.SetValueQuality(variableState.quality);
+                aVariableModel.SetValueQuality(variableValue.Quality);
 
                 if (aVariableModel.mValueQuality == ValueQuality.Bad)
                     return;
 
 
                 // wypracowanie przez klasę modelu informacji o wartości zmiennej i limitach
-                aVariableModel.SetFormatedValueAndValueLimit(variableState.value);
+                aVariableModel.SetFormatedValueAndValueLimit(variableValue.Value);
 
 
                 // Odczyt średniej wartości zmiennej z serwera REST
-                VariableState variableAverage = asixRestClient.ReadVariableAggregate(aVariableModel.mName, "Average", "15m");
-                if (!variableAverage.readSucceeded || variableAverage.IsQualityBad())
+                ICollection<VariableValue> variableAverages = await asixRestClient.GetVariableAggregateAsync(aVariableModel.mName, "Average", "15m", null, null, "60S");
+                VariableValue variableAverage = variableAverages.First();
+                if (!variableAverage.ReadSucceeded || AsixRestClient.IsQualityBad(variableAverage.Quality))
                     return;
 
 
                 // wypracowanie przez klasę modelu informacji o trendzie zmian wartości zmiennej
-                aVariableModel.SetValueTrend(variableState.value, variableAverage.value);
+                aVariableModel.SetValueTrend(variableValue.Value, variableAverage.Value);
             }
             catch (Exception e)
             {

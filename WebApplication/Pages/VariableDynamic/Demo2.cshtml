@@ -41,6 +41,7 @@
     <script>
         function refreshVariables() {
             var ajaxRequest = 'Demo2?handler=Variables@(Html.Raw(variableRequest))';
+
             $.get(ajaxRequest, function (data) {
                 for (i = 0; i < data.length; i++)
                     updateView(data[i].mName, data[i]);

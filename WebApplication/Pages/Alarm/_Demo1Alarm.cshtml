@@ -4,23 +4,23 @@
 <div class="card bg-light shadow-sm" style="width: 18rem;">
 
     @*Nagłówek karty alarmu zawierający nazwę alarmu*@
-    <div class="card-header bg-light"><h4>@Model.mName</h4></div>
+    <div class="card-header bg-light"><h4>@Model.Name</h4></div>
 
     <div class="card-body">
         @*Wyświetlenie stanu alarmów jeśli odczyt się powiódł*@
-        @if (Model.mAlarmState.readSucceeded)
+        @if (Model.AlarmState.ReadSucceeded)
         {
             <div class="d-flex justify-content-between">
 
                 <div class="pr-2">
                     @*Wyświetlenie opisu alarmu jeśli jest dostępny lub tekstu Aktywny/Nieaktywny*@
-                    @if (!string.IsNullOrEmpty(Model.mAlarmState.stateDescription))
+                    @if (!string.IsNullOrEmpty(Model.AlarmState.StateDescription))
                     {
-                        @Model.mAlarmState.stateDescription
+                        @Model.AlarmState.StateDescription
                     }
                     else
 
-                    if (Model.mAlarmState.active)
+                   if (Model.AlarmState.Active)
                         {
                             @:Aktywny
                         }
@@ -31,7 +31,7 @@
                 </div>
 
                 @*Wyświetlenie ikony reprezentującej stan alarmu*@
-                @if (Model.mAlarmState.active)
+                @if (Model.AlarmState.Active)
                 {
                     <i class="fas fa-bell fa-3x" style="color:red"></i>
                 }
@@ -45,10 +45,10 @@
 
 
     @*Wyświetlenie tekst błędu jeśli odczyt się nie powiódł*@
-    @if (!Model.mAlarmState.readSucceeded)
+    @if (!Model.AlarmState.ReadSucceeded)
     {
         <div class="card-footer py-0 text-right text-white bg-danger">
-            Błąd odczytu: @Model.mAlarmState.readStatusString
+            Błąd odczytu: @Model.AlarmState.ReadStatusString
         </div>
     }
 </div>

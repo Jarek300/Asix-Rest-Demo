@@ -21,21 +21,21 @@
 
 
 @*Obsługa błędów*@
-@if (!@Model.mVariableAggregateArchiveA000.readSucceeded)
+@if (!Model.mVariableAggregateArchiveA000.ReadSucceeded)
 {
     <div class="alert alert-danger" role="alert">
-        @Model.mVariableAggregateArchiveA000.readStatusString;
+        @Model.mVariableAggregateArchiveA000.ReadStatusString;
     </div>
 }
 
-@if (!@Model.mVariableAggregateArchiveA004.readSucceeded)
+@if (!Model.mVariableAggregateArchiveA004.ReadSucceeded)
 {
     <div class="alert alert-danger" role="alert">
-        @Model.mVariableAggregateArchiveA004.readStatusString;
+        @Model.mVariableAggregateArchiveA004.ReadStatusString;
     </div>
 }
 
-@if (!@Model.mVariableAggregateArchiveA000.readSucceeded || !@Model.mVariableAggregateArchiveA004.readSucceeded)
+@if (!Model.mVariableAggregateArchiveA000.ReadSucceeded || !Model.mVariableAggregateArchiveA004.ReadSucceeded)
 {
     return;
 }
@@ -44,20 +44,20 @@
 
 
 @{
-    int count = @Model.mVariableAggregateArchiveA000.samples.Count();
+    int count = @Model.mVariableAggregateArchiveA000.Samples.Count;
 }
 
 
 @*Generowanie tablicy wyświetlającej dane pobrane z archiwum aplikacji*@
 <table class="table">
-    
+
     @*Nagłówek tablicy*@
     <thead>
         <tr>
             <th scope="col">#</th>
             <th scope="col">Stempel czasu</th>
-            <th scope="col">@Model.mVariableAggregateArchiveA000.id</th>
-            <th scope="col">@Model.mVariableAggregateArchiveA004.id</th>
+            <th scope="col">@Model.mVariableAggregateArchiveA000.Id</th>
+            <th scope="col">@Model.mVariableAggregateArchiveA004.Id</th>
         </tr>
     </thead>
 
@@ -67,30 +67,30 @@
         {
             //Kolejny wiersz tablicy
 
-            VariableAggregateSample sampleA000 = @Model.mVariableAggregateArchiveA000.samples[i];
-            VariableAggregateSample sampleA004 = @Model.mVariableAggregateArchiveA004.samples[i];
+            Asix.ProcessedSample sampleA000 = Model.mVariableAggregateArchiveA000.Samples[i];
+            Asix.ProcessedSample sampleA004 = Model.mVariableAggregateArchiveA004.Samples[i];
 
             <tr>
                 <th scope="row">@(i + 1)</th>
-                <td>@sampleA000.t.ToLocalTime().ToString()</td>
+                <td>@sampleA000.T.ToLocalTime().ToString()</td>
 
-                @if (@sampleA000.IsQualityBad())
+                @if (Asix.AsixRestClient.IsQualityBad(sampleA000.Q))
                 {
                     <td></td>
                 }
                 else
                 {
-                    <td>@sampleA000.v.ToString("F1")</td>
+                    <td>@sampleA000.V.ToString("F1")</td>
                 }
 
 
-                @if (@sampleA004.IsQualityBad())
+                @if (Asix.AsixRestClient.IsQualityBad(sampleA004.Q))
                 {
                     <td></td>
                 }
                 else
                 {
-                    <td>@sampleA004.v.ToString("F1")</td>
+                    <td>@sampleA004.V.ToString("F1")</td>
                 }
             </tr>
         }

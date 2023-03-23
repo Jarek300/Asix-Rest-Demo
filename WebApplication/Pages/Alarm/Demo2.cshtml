@@ -12,37 +12,37 @@
 
     <form method="post">
         <div class="form-group row">
-            <div class="col-1" --style="width:10rem">Data</div> 
+            <div class="col-1" --style="width:10rem">Data</div>
             <div class="col-3" --style="width:20rem"><input asp-for="@Model.DateReadTime" style="width:100%"/></div>
             </div>
         <div class="form-group row">
-            <div  class="col-1">Okres</div>  
+            <div  class="col-1">Okres</div>
             <div  class="col-3"><select asp-for="@Model.PeriodLength" asp-items="@Model.Periods" style="width:100%"></select> </div>
             </div>
         <div class="form-group row">
-            <button type="submit" class="btn btn-primary">Odśwież</button>    
+            <button type="submit" class="btn btn-primary">Odśwież</button>
             </div>
     </form>
 </div>
 
 
 @*Komunikat błędu jeśli odczyt nie powiódł się*@
-@if (!@Model.mHistAlarmArchive.readSucceeded)
+@if (!Model.mHistAlarmArchive.ReadSucceeded)
 {
     <div class="alert alert-danger" role="alert">
-        @Model.mHistAlarmArchive.readStatusString;
+        @Model.mHistAlarmArchive.ReadStatusString;
     </div>
     return;
 }
 
 
 @{
-    int count = @Model.mHistAlarmArchive.alarms.Count();
+    int count = @Model.mHistAlarmArchive.Alarms.Count();
 }
 
 
 <div class="alert alert-info" role="alert">
-    @if (@Model.mHistAlarmArchive.moreDataAvailable)
+    @if (Model.mHistAlarmArchive.MoreDataAvailable)
     {
         @:Przeczytano pierwsze @count alarmów.
     }
@@ -71,20 +71,20 @@
         {
             <tr>
                 <th scope="row">@(i + 1)</th>
-            
+
                 @{
-                    HistAlarmState histAlarmState = Model.mHistAlarmArchive.alarms[i];
+                    Asix.HistoricalAlarm histAlarmState = Model.mHistAlarmArchive.Alarms[i];
                 }
 
-                <td>@histAlarmState.name</td>
+                <td>@histAlarmState.Name</td>
 
-                <td>@histAlarmState.description</td>
+                <td>@histAlarmState.Description</td>
 
-                <td>@histAlarmState.startTime.ToLocalTime().ToString()</td>
+                <td>@histAlarmState.StartTime.ToLocalTime().ToString()</td>
 
-                @if (histAlarmState.endTime.HasValue)
+                @if (histAlarmState.EndTime.HasValue)
                 {
-                    <td>@histAlarmState.endTime.Value.ToLocalTime().ToString()</td>
+                    <td>@histAlarmState.EndTime.Value.ToLocalTime().ToString()</td>
                 }
                 else
                 {

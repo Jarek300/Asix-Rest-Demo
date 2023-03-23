@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Asix;
 
 
 namespace WebApplication.Pages.Variable
@@ -29,7 +29,7 @@ namespace WebApplication.Pages.Variable
         /// <summary>
         /// Ewentualny błąd odczytu wartości zmiennej
         /// </summary>
-        public string mReadError;
+        public string mReadError = "";
     }
 
 
@@ -55,15 +55,15 @@ namespace WebApplication.Pages.Variable
         /// <summary>
         /// Funkcja wywoływana przy generowaniu strony. Czyta wartosci kolejny zmiennych.
         /// </summary>
-        public void OnGet()
+        public async Task OnGet()
         {
-            ReadVariableValue(mVariableModelA000);
-            ReadVariableValue(mVariableModelA004);
-            ReadVariableValue(mVariableModelA008);
+            await ReadVariableValue(mVariableModelA000);
+            await ReadVariableValue(mVariableModelA004);
+            await ReadVariableValue(mVariableModelA008);
 
-            ReadVariableValue(mVariableModelA082);
-            ReadVariableValue(mVariableModelA084);
-            ReadVariableValue(mVariableModelA086);
+            await ReadVariableValue(mVariableModelA082);
+            await ReadVariableValue(mVariableModelA084);
+            await ReadVariableValue(mVariableModelA086);
         }
 
 
@@ -72,35 +72,36 @@ namespace WebApplication.Pages.Variable
         /// Odczyt wartości jednej zmiennej
         /// </summary>
         /// <param name="aVariableModel">Model zmiennej. Jego pole mName zawiera nazwe zmiennej.</param>
-        void ReadVariableValue(Demo2VariableModel aVariableModel)
+        async Task ReadVariableValue(Demo2VariableModel aVariableModel)
         {
             try
             {
-                AsixRestClient asixRestClient = new AsixRestClient();
+                AsixRestClient asixRestClient = AsixRestClient.Create();
 
                 // Odczyt wartości zmiennej z serwera REST
-                VariableState variableState = asixRestClient.ReadVariableState(aVariableModel.mName);
+                ICollection<VariableValue> variableStates = await asixRestClient.GetVariableValueAsync(new string[] { aVariableModel.mName });
+                VariableValue variableState = variableStates.First();
 
 
                 // Obsług błędu odczytu
-                if (!variableState.readSucceeded)
+                if (!variableState.ReadSucceeded)
                 {
-                    aVariableModel.mReadError = variableState.readStatusString;
+                    aVariableModel.mReadError = variableState.ReadStatusString;
                     return;
                 }
 
 
                 // Formatowanie wartości zmiennej
-                if (variableState.IsQualityGood())
+                if (AsixRestClient.IsQualityGood(variableState.Quality))
                 {
                     // Formatowanie wartości o jakości dobrej
-                    double value = (double)variableState.value;
+                    double value = (double)variableState.Value;
                     aVariableModel.mValueFormatted = value.ToString("F0");
                 }
-                else if (variableState.IsQualityUncertain())
+                else if (AsixRestClient.IsQualityUncertain(variableState.Quality))
                 {
                     // Formatowanie wartości o jakości niepewnej
-                    double value = (double)variableState.value;
+                    double value = (double)variableState.Value;
                     aVariableModel.mValueFormatted = value.ToString("F0") + "?";
                 }
                 else

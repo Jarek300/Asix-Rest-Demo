@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Asix;
 
 
 namespace WebApplication.Pages.Variable
@@ -12,22 +12,22 @@ namespace WebApplication.Pages.Variable
         /// <summary>
         /// Przeczytana i sformatowana wartości zmiennej
         /// </summary>
-        public string mValueFormatted;
+        public string mValueFormatted = "";
 
         /// <summary>
         /// Opis ewentualnego błędu odczytu
         /// </summary>
-        public string mReadError;
+        public string mReadError = "";
 
 
         /// <summary>
         /// Funkcja wywoływana przy generowaniu strony
         /// </summary>
-        public void OnGet()
+        public async Task OnGet()
         {
             try
             {
-                ReadVariableValue();
+                await ReadVariableValue();
             }
             catch (Exception e)
             {
@@ -36,33 +36,34 @@ namespace WebApplication.Pages.Variable
         }
 
 
-        void ReadVariableValue()
+        async Task ReadVariableValue()
         {
-            AsixRestClient asixRestClient = new AsixRestClient();
+            AsixRestClient asixRestClient = AsixRestClient.Create();
 
             // Odczyt wartości zmiennej
-            VariableState variableState = asixRestClient.ReadVariableState("A110");
+            ICollection<VariableValue> variableValues = await asixRestClient.GetVariableValueAsync(new string[] { "A110" });
+            VariableValue variableState = variableValues.First();
 
 
             // Sprawdzenie czy nie wystąpił błąd odczytu
-            if (!variableState.readSucceeded)
+            if (!variableState.ReadSucceeded)
             {
-                mReadError = variableState.readStatusString;
+                mReadError = variableState.ReadStatusString;
                 return;
             }
 
 
             // Formatowanie wartości zmiennej
-            if (variableState.IsQualityGood())
+            if (AsixRestClient.IsQualityGood(variableState.Quality))
             {
                 // Formatowanie wartości o jakości dobrej
-                double value = (double)variableState.value;
+                double value = (double)variableState.Value;
                 mValueFormatted = value.ToString("F0");
             }
-            else if (variableState.IsQualityUncertain())
+            else if (AsixRestClient.IsQualityUncertain(variableState.Quality))
             {
                 // Formatowanie wartości o jakości niepewnej
-                double value = (double)variableState.value;
+                double value = (double)variableState.Value;
                 mValueFormatted = value.ToString("F0") + "?";
             }
             else

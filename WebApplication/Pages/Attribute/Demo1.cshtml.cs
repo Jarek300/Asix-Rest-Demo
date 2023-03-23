@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Asix;
 
 
 namespace WebApplication.Pages.Attribute
@@ -23,31 +22,32 @@ namespace WebApplication.Pages.Attribute
         /// <summary>
         /// Opis ewentualnego błędu odczytu
         /// </summary>
-        public string mReadError;
+        public string mReadError = "";
 
         /// <summary>
         /// Przeczytane wartości atrybutów zmiennej
         /// </summary>
-        public List<string> mVariableAttributes;
+        public List<string> mVariableAttributes = new();
 
 
         /// <summary>
         /// Funkcja wywoływana przy generowaniu strony
         /// </summary>
-        public void OnGet()
+        public async Task OnGet()
         {
             try
             {
-                AsixRestClient asixRestClient = new AsixRestClient();
-                VariableAttributes variableAttributes = asixRestClient.ReadVariableAttributes(mVariableName, mAttributeNameList);
+                AsixRestClient asixRestClient = AsixRestClient.Create();
+                ICollection<ICollection<string>> variableAttributesCollection = await asixRestClient.GetVariableAttributeAsync(new string[] { mVariableName }, mAttributeNameList);
+                ICollection<string>? variableAttributes = variableAttributesCollection.FirstOrDefault();
 
-                if (variableAttributes.readSucceeded)
+                if (variableAttributes != null)
                 {
-                    mVariableAttributes = variableAttributes.mAttributeValueList;
+                    mVariableAttributes = variableAttributes.ToList();
                 }
                 else
                 {
-                    mReadError = variableAttributes.readStatusString;
+                    mReadError = "Błąd odczytu atrybutów : nieznana zmienna";
                 }
             }
             catch (Exception e)

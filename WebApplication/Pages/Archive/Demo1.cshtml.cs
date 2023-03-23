@@ -1,7 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Asix;
 
 
 namespace WebApplication.Pages.Archive
@@ -18,33 +18,33 @@ namespace WebApplication.Pages.Archive
         public DateTime DateReadTime { get; set; } = DateTime.Today;
 
         // Pola przechowujące odczytane dane
-        public VariableAggregateArchive mVariableAggregateArchiveA000;
-        public VariableAggregateArchive mVariableAggregateArchiveA004;
+        public ReadProcessedResult mVariableAggregateArchiveA000 = new();
+        public ReadProcessedResult mVariableAggregateArchiveA004 = new();
 
 
         // Wywoływane przy ładowaniu strony
-        public void OnGet()
+        public async Task OnGet()
         {
-            ReadData();
+            await ReadData();
         }
 
 
 
         // Wywoływane po naciśnięciu na stronie przycisku 'Czytaj'
-        public void OnPost()
+        public async Task OnPost()
         {
-            ReadData();
+            await ReadData();
         }
 
 
         // Odczyt danych agregowanych
-        void ReadData()
+        async Task ReadData()
         {
-            AsixRestClient asixRestClient = new AsixRestClient();
+            AsixRestClient asixRestClient = AsixRestClient.Create();
 
             string periodStartOpc = DateReadTime.Date.ToString("o");   // format ISO, też obsługiwany
-            mVariableAggregateArchiveA000 = asixRestClient.ReadVariableAggregateArchive("A000", "Average", periodStartOpc, "1D", "1H");
-            mVariableAggregateArchiveA004 = asixRestClient.ReadVariableAggregateArchive("A004", "Average", periodStartOpc, "1D", "1H");
+            mVariableAggregateArchiveA000 = await asixRestClient.GetVariableArchiveProcessedAsync("A000", "Average", periodStartOpc, "1D", "1H", null);
+            mVariableAggregateArchiveA004 = await asixRestClient.GetVariableArchiveProcessedAsync("A004", "Average", periodStartOpc, "1D", "1H", null);
         }
     }
 }

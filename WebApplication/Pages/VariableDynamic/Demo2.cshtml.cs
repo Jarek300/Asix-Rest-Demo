@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
+using Asix;
 
 namespace WebApplication.Pages.VariableDynamic
 {
@@ -58,21 +54,22 @@ namespace WebApplication.Pages.VariableDynamic
         /// </summary>
         /// <param name="name">Nazwa zmiennej, może wystapić wielokrotnie</param>
         /// <returns>Json zawierający tablicę obiektów VariableModel</returns>
-        public JsonResult OnGetVariables(string[] name)
+        public async Task<JsonResult> OnGetVariables(string[] name)
         {
-            if (name == null)
-                return null;
-
             List<VariableModel> variables = new List<VariableModel>();
+
+            if (name == null)
+                return new JsonResult(variables.ToArray());
+
             foreach (string variableName in name)
             {
-                VariableModel variableModel = null;
+                VariableModel variableModel;
                 if (!mVariables.ContainsKey(variableName))
                     variableModel = new VariableModel(variableName, "", "");
                 else
                     variableModel = mVariables[variableName];
 
-                ReadVariableValue(variableModel);
+                await ReadVariableValue(variableModel);
                 variables.Add(variableModel);
             }
 
@@ -80,34 +77,28 @@ namespace WebApplication.Pages.VariableDynamic
         }
 
 
-        void ReadVariableValue(VariableModel aVariableModel)
+        async Task ReadVariableValue(VariableModel aVariableModel)
         {
             try
             {
-                AsixRestClient asixRestClient = new AsixRestClient();
-                VariableState variableState = asixRestClient.ReadVariableState(aVariableModel.mName);
+                AsixRestClient asixRestClient = AsixRestClient.Create();
+                ICollection<VariableValue> variableStates = await asixRestClient.GetVariableValueAsync(new string[] { aVariableModel.mName });
+                VariableValue variableState = variableStates.First();
 
-                if (!variableState.readSucceeded)
-                {
-                    aVariableModel.mReadError = variableState.readStatusString;
-                    return;
-                }
+                aVariableModel.mDateTime = variableState.TimeStamp;
 
-
-                aVariableModel.mDateTime = variableState.timeStamp;
-
-                switch (variableState.quality & 0xC0)
+                switch (variableState.Quality & 0xC0)
                 {
                     case 0xC0:
                         {
-                            double value = (double)variableState.value;
+                            double value = (double)variableState.Value;
                             aVariableModel.mValueFormatted = value.ToString("F0");
                             break;
                         }
 
                     case 0x40:
                         {
-                            double value = (double)variableState.value;
+                            double value = (double)variableState.Value;
                             aVariableModel.mValueFormatted = value.ToString("F0") + "?";
                             break;
                         }

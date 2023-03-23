@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Asix;
 
 
 namespace WebApplication.Pages.Attribute
@@ -15,49 +14,36 @@ namespace WebApplication.Pages.Attribute
         /// <summary>
         /// Opis ewentualnego błędu odczytu
         /// </summary>
-        public string mReadError;
+        public string mReadError = "";
 
         /// <summary>
         /// Lista nazw wszystkich atrybutów w bazie definicji zmiennych
         /// </summary>
-        public List<string> mAttributeNames;
+        public List<string> mAttributeNames = new();
 
         /// <summary>
         /// Lista wartości atrybutów
         /// </summary>
-        public List<string> mVariableAttributes;
+        public List<string> mVariableAttributes = new();
 
 
         /// <summary>
         /// Funkcja wywoływana przy generowaniu strony
         /// </summary>
-        public void OnGet()
+        public async Task OnGet()
         {
             try
             {
-                AsixRestClient asixRestClient = new AsixRestClient();
+                AsixRestClient asixRestClient = AsixRestClient.Create();
 
                 // Odczyt z serwera REST nazw wszystkich atrybutów
-                ServerAttributes serverAttributes = asixRestClient.ReadAttributeNames();
-                if (!serverAttributes.readSucceeded)
-                {
-                    mReadError = serverAttributes.readStatusString;
-                    return;
-                }             
-               
-                mAttributeNames = serverAttributes.mAttributeNameList;                
-
+                var serverAttributeNames = await asixRestClient.GetServerAttributeNamesAsync();
+                mAttributeNames = serverAttributeNames.ToList();
 
 
                 // Odczyt z serwera REST wartości atrybutów atrybutów zmiennej
-                VariableAttributes variableAttributes = asixRestClient.ReadVariableAttributes(mVariableName, mAttributeNames);
-                if (!variableAttributes.readSucceeded)
-                {
-                    mReadError = variableAttributes.readStatusString;
-                    return;
-                }
-
-                mVariableAttributes = variableAttributes.mAttributeValueList;
+                ICollection<ICollection<string>> variableAttributes = await asixRestClient.GetVariableAttributeAsync(new string[] { mVariableName }, mAttributeNames);
+                mVariableAttributes = variableAttributes.First().ToList();
             }
             catch (Exception e)
             {
