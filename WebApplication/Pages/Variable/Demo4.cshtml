@@ -1,0 +1,73 @@
+﻿@page
+@model WebApplication.Pages.Variable.Demo4Model
+@{
+}
+
+@*Nagłówek strony*@
+<div class="jumbotron bg-light shadow-sm">
+    <h1 class="display-4">Zapis wartości zmiennej @Model.VariableModel.Name</h1>
+</div>
+
+
+
+@*Obsługa błędów*@
+@if (!string.IsNullOrEmpty(Model.VariableModel.ReadError))
+{
+    <div class="alert alert-danger" role="alert">
+        Błąd odczytu: @Model.VariableModel.ReadError;
+    </div>
+    return;
+}
+
+
+@*Karta wyświetlająca sformatowaną wartość zmiennej*@
+<div class="card bg-light shadow-sm " style="width: 18rem;">
+    <div class="card-body">
+        <p>@Model.VariableModel.Decription</p>
+        <h3>@Model.VariableModel.ValueFormatted @Model.VariableModel.Unit</h3>
+    </div>
+
+    <div class="card-footer">
+        <a id="btnRefresh" class="btn btn-secondary" asp-area="" asp-page="Variable/Demo1">Czytaj</a>
+    </div>
+</div>
+
+
+
+<div class="bg-light shadow-sm p-4 mt-4" style="width:25em;">
+    <form method="post">
+
+        <div class="form-row">
+            <div class="form-group col-6">
+                <label for="userName">Nazwa użytkownika</label>
+                <input type="text" class="form-control" id="userName" name="userName" value="@Model.UserName">
+            </div>
+            <div class="form-group col-6">
+                <label for="password">Hasło</label>
+                <input type="password" class="form-control" id="password" name="password" value="@Model.Password">
+            </div>
+        </div>
+
+
+        <div class="form-row">
+            <div class="form-group col-6">
+                <label for="newValue">Nowa wartość</label>
+                <input type="text" class="form-control" id="newValue" name="newValue" value="@Model.NewValue">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-secondary">Zapisz</button>
+
+        <script>document.getElementById("userName").focus();</script>
+
+    </form>
+</div>
+
+
+@*Karta wyświetlająca błąd zapisu*@
+@if (!string.IsNullOrEmpty(Model.WriteError))
+{
+    <div class="alert alert-danger" role="alert">
+        Błąd zapisu: @Model.WriteError;
+    </div>
+}

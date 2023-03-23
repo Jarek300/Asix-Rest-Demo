@@ -10,7 +10,7 @@ namespace WebApplication.Pages.Alarm
     public class AlarmModel
     {
         public string Name;
-        public Asix.AlarmState AlarmState = new AlarmState();
+        public AlarmState AlarmState = new AlarmState();
 
         public AlarmModel(string aName)
         {
