@@ -1,24 +1,24 @@
-﻿@model WebApplication.Pages.Variable.Demo2VariableModel
+﻿@model WebApplication.Code.VariableModel
 
 @*Karta wyświetlająca wynik odczytu wartości jednej zmiennej*@
 <div class="card bg-light shadow-sm" style="width: 18rem;">
 
     @*Ewentualny bład odczytu wyświetlany jest w nagłówku karty*@
-    @if (!string.IsNullOrEmpty(Model.mReadError))
+    @if (!string.IsNullOrEmpty(Model.ReadError))
     {
-        <div class="card-header bg-danger text-white"><h5>Błąd odczytu</h5> @Model.mReadError</div>
+        <div class="card-header bg-danger text-white"><h5>Błąd odczytu</h5> @Model.ReadError</div>
     }
 
 
     @*Ciało karty - opis, wartość i jednostka*@
     <div class="card-body">
-        <p>@Model.mDecription</p>
-        <h3>@Model.mValueFormatted @Model.mUnit</h3>
+        <p>@Model.Decription</p>
+        <h3>@Model.ValueFormatted @Model.Unit</h3>
     </div>
 
 
     @*Stopka karty - w celach informacyjnych wyświetla nazwę zmiennej*@
     <div class="card-footer py-0 text-right">
-        <small class="text-muted">@Model.mName</small>
+        <small class="text-muted">@Model.Name</small>
     </div>
 </div>

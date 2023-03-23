@@ -1,55 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Asix;
-
+using WebApplication.Code;
 
 namespace WebApplication.Pages.Variable
 {
-    /// <summary>
-    /// Klasa przechowująca model jednej zmiennej
-    /// </summary>
-    public class Demo2VariableModel
-    {
-        public Demo2VariableModel(string aName, string aDecription, string aUnit)
-        {
-            mName = aName;
-            mDecription = aDecription;
-            mUnit = aUnit;
-        }
-
-        /// <summary>
-        ///  Atrybuty zmiennej
-        /// </summary>
-        public string mName, mDecription, mUnit;
-
-        /// <summary>
-        /// Sformatowaną wartość zmiennej
-        /// </summary>
-        public string mValueFormatted = "?";
-
-        /// <summary>
-        /// Ewentualny błąd odczytu wartości zmiennej
-        /// </summary>
-        public string mReadError = "";
-    }
-
-
-
     /// <summary>
     /// Przykład odczytu wartości wielu zmiennych
     /// </summary>
     public class Demo2Model : PageModel
     {
-        /// <summary>
-        /// Model zmiennej A000
-        /// </summary>
-        public Demo2VariableModel mVariableModelA000 = new Demo2VariableModel("A000", "Temperatura spalin przed odemglaczem", "°C");
+        public List<VariableModel> mVariableModelList = new List<VariableModel>();
 
-        public Demo2VariableModel mVariableModelA004 = new Demo2VariableModel("A004", "Temperatura kwasu siarkowego", "°C");
-        public Demo2VariableModel mVariableModelA008 = new Demo2VariableModel("A008", "Temperatura wody ciepłej", "°C");
+        public VariableModel mVariableModelA000 = new("A000", "Temperatura spalin przed odemglaczem", "°C");
+        public VariableModel mVariableModelA004 = new("A004", "Temperatura kwasu siarkowego", "°C");
+        public VariableModel mVariableModelA008 = new("A008", "Temperatura wody ciepłej", "°C");
+        public VariableModel mVariableModelA082 = new("A082", "Przepływ kwasu siarkowego", "m³/h");
+        public VariableModel mVariableModelA084 = new("A084", "Poziom w zb. cyrkulacyjnym kwasu", "%");
+        public VariableModel mVariableModelA086 = new("A086", "Przepływ wody chłodzącej", "m³/h");
 
-        public Demo2VariableModel mVariableModelA082 = new Demo2VariableModel("A082", "Przepływ kwasu siarkowego", "m³/h");
-        public Demo2VariableModel mVariableModelA084 = new Demo2VariableModel("A084", "Poziom w zb. cyrkulacyjnym kwasu", "%");
-        public Demo2VariableModel mVariableModelA086 = new Demo2VariableModel("A086", "Przepływ wody chłodzącej", "m³/h");
+
+        public Demo2Model()
+        {
+            mVariableModelList.Add(mVariableModelA000);
+            mVariableModelList.Add(mVariableModelA004);
+            mVariableModelList.Add(mVariableModelA008);
+            mVariableModelList.Add(mVariableModelA082);
+            mVariableModelList.Add(mVariableModelA084);
+            mVariableModelList.Add(mVariableModelA086);
+        }
 
 
         /// <summary>
@@ -57,13 +35,7 @@ namespace WebApplication.Pages.Variable
         /// </summary>
         public async Task OnGet()
         {
-            await ReadVariableValue(mVariableModelA000);
-            await ReadVariableValue(mVariableModelA004);
-            await ReadVariableValue(mVariableModelA008);
-
-            await ReadVariableValue(mVariableModelA082);
-            await ReadVariableValue(mVariableModelA084);
-            await ReadVariableValue(mVariableModelA086);
+            await ReadVariableValues();
         }
 
 
@@ -72,47 +44,28 @@ namespace WebApplication.Pages.Variable
         /// Odczyt wartości jednej zmiennej
         /// </summary>
         /// <param name="aVariableModel">Model zmiennej. Jego pole mName zawiera nazwe zmiennej.</param>
-        async Task ReadVariableValue(Demo2VariableModel aVariableModel)
+        async Task ReadVariableValues()
         {
             try
             {
                 AsixRestClient asixRestClient = AsixRestClient.Create();
 
                 // Odczyt wartości zmiennej z serwera REST
-                ICollection<VariableValue> variableStates = await asixRestClient.GetVariableValueAsync(new string[] { aVariableModel.mName });
-                VariableValue variableState = variableStates.First();
+                string[] variableNames = mVariableModelList.Select(x => x.Name).ToArray();
+                IList<VariableValue> variableValues = await asixRestClient.GetVariableValueAsync(variableNames);
 
-
-                // Obsług błędu odczytu
-                if (!variableState.ReadSucceeded)
+                for (int i = 0; i < mVariableModelList.Count; i++)
                 {
-                    aVariableModel.mReadError = variableState.ReadStatusString;
-                    return;
+                    mVariableModelList[i].SetVariableValue(variableValues[i]);
                 }
 
-
-                // Formatowanie wartości zmiennej
-                if (AsixRestClient.IsQualityGood(variableState.Quality))
-                {
-                    // Formatowanie wartości o jakości dobrej
-                    double value = (double)variableState.Value;
-                    aVariableModel.mValueFormatted = value.ToString("F0");
-                }
-                else if (AsixRestClient.IsQualityUncertain(variableState.Quality))
-                {
-                    // Formatowanie wartości o jakości niepewnej
-                    double value = (double)variableState.Value;
-                    aVariableModel.mValueFormatted = value.ToString("F0") + "?";
-                }
-                else
-                {
-                    // Dla wartości o jakości złej wyświetlimy pytajnik
-                    aVariableModel.mValueFormatted = "?";
-                }
             }
             catch (Exception e)
             {
-                aVariableModel.mReadError = e.Message;
+                for (int i = 0; i < mVariableModelList.Count; i++)
+                {
+                    mVariableModelList[i].SetError(e.Message);
+                }
             }
         }
     }
