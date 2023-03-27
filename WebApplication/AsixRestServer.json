@@ -1,1595 +1,1598 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "version": "v1",
-        "title": "Asix REST Server"
-    },
-    "host": "localhost",
-    "basePath": "/asix",
-    "schemes": [
-        "http"
-    ],
-    "paths": {
-        "/v1/server/info": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read the version of the REST server software",
-                "operationId": "PublicApi_GetServerInfo",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/PublicServerInfo"
-                        }
-                    }
-                }
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "Asix REST Server"
+  },
+  "host": "localhost",
+  "basePath": "/asix",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/v1/server/info": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read the version of the REST server software",
+        "operationId": "PublicApi_GetServerInfo",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PublicServerInfo"
             }
-        },
-        "/v1/server/variable/aggregate": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read names of available aggregate functions",
-                "operationId": "PublicApi_GetServerAggregateNames",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/AggregateDesc"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/server/variable/attribute": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read names of available variable attributes",
-                "operationId": "PublicApi_GetServerAttributeNames",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/server/alarm/domain": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read names of available alarm domains",
-                "operationId": "PublicApi_GetServerAlarmDomainNames",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/variable/attribute": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read values of variables attributes",
-                "description": "If variable name is incorrect then the null value is returned instead of the subarray.\r\nIf attribute name is incorrect then the null value is returned instead of the text.",
-                "operationId": "PublicApi_GetVariableAttribute",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "Variable name",
-                        "required": true,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    },
-                    {
-                        "name": "attribute",
-                        "in": "query",
-                        "description": "Attribute name; e.g. Name, Description, Unit",
-                        "required": true,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read values of variables attributes",
-                "operationId": "PublicApi_PostGetVariableAttribute",
-                "consumes": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml",
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "aParams",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/PostGetVariableAttributeParams"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/variable/value": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read the current values ​​of variables",
-                "operationId": "PublicApi_GetVariableValue",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "Variable name",
-                        "required": true,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/VariableValue"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Write the current value of a variable",
-                "description": "Requires the use of https and basic authentication",
-                "operationId": "PublicApi_PutVariableValue",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "value",
-                        "in": "query",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "quality",
-                        "in": "query",
-                        "required": false,
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    {
-                        "name": "timeStamp",
-                        "in": "query",
-                        "required": false,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read the current values ​​of variables",
-                "operationId": "PublicApi_PostGetVariableValue",
-                "consumes": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml",
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "aNames",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/VariableValue"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/variable/aggregate": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read the current value of a variable aggregate",
-                "description": "You should give either periodLength or periodStart and periodEnd.",
-                "operationId": "PublicApi_GetVariableAggregate",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "Variable name",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "aggregate",
-                        "in": "query",
-                        "description": "Aggregate name; e.g. Start, Average, SumUp.",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "periodLength",
-                        "in": "query",
-                        "description": "The length of the period for which the aggregate is calculated. The length should be given in OPC time format, e.g. 1H.",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "periodStart",
-                        "in": "query",
-                        "description": "The beginning of the period for which the aggregate is calculated. The date should be given in OPC format, e.g. DAY-1D",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "periodEnd",
-                        "in": "query",
-                        "description": "The end of the period for which the aggregate is calculated. The date should be given in OPC format, e.g. DAY",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "refreshInterval",
-                        "in": "query",
-                        "description": "The length of the aggregate calculation period. The length should be given in the OPC time format. e.g. 5M",
-                        "required": false,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/VariableValue"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read the current values of variables aggregates",
-                "operationId": "PublicApi_PostGetVariableAggregate",
-                "consumes": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml",
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "aAggregateRangeList",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/AggregateRange"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/VariableValue"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/variable/archive/raw": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read raw historical values ​​of a variable",
-                "operationId": "PublicApi_GetVariableArchiveRaw",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "Variable name",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "periodStart",
-                        "in": "query",
-                        "description": "The beginning of the period from which the data is read. The date should be given in OPC or ISO 8601 format.",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "periodLength",
-                        "in": "query",
-                        "description": "The length of the period from which the data is read. The length should be given in OPC time format, e.g. 1D.",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "archiveType",
-                        "in": "query",
-                        "description": "Optional parameter specifying the type of archive from which the archival values should be read, e.g. D, H, B.",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "leftBound",
-                        "in": "query",
-                        "description": "Optional parameter determining whether to return the left limit. The default value is true.",
-                        "required": false,
-                        "type": "boolean"
-                    },
-                    {
-                        "name": "rightBound",
-                        "in": "query",
-                        "description": "Optional parameter determining whether to return the right limit. The default value is true.",
-                        "required": false,
-                        "type": "boolean"
-                    },
-                    {
-                        "name": "maxNumberOfSamples",
-                        "in": "query",
-                        "description": "An optional parameter determining how many samples can be returned.",
-                        "required": false,
-                        "type": "integer",
-                        "format": "int32"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ReadRawResult"
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/variable/archive/processed": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read aggregated historical values ​​of a variable",
-                "operationId": "PublicApi_GetVariableArchiveProcessed",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "Variable name",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "aggregate",
-                        "in": "query",
-                        "description": "Aggregate name; e.g. Start, Average, SumUp.",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "periodStart",
-                        "in": "query",
-                        "description": "The beginning of the period from which the data is read. The date should be given in OPC or ISO 8601 format.",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "periodLength",
-                        "in": "query",
-                        "description": "The length of the period from which the data is read. The length should be given in OPC time format, e.g. 1D.",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "resampleInterval",
-                        "in": "query",
-                        "description": "The length of the aggregate interval. The length should be given in OPC format e.g. 1H",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "archiveType",
-                        "in": "query",
-                        "description": "Optional parameter specifying the type of archive from which the archival values should be read, e.g. D, H, B.",
-                        "required": false,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ReadProcessedResult"
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/alarm/state": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read the current status of alarms",
-                "operationId": "PublicApi_GetAlarmsState",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "domain",
-                        "in": "query",
-                        "description": "Alarm domain name",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "Alarm name",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/AlarmState"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read the current status of alarms",
-                "operationId": "PublicApi_PostGetAlarmsState",
-                "consumes": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml",
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "aAlarmIdList",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/AlarmId"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/AlarmState"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/alarm/full-state": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read the full current status of alarms",
-                "operationId": "PublicApi_GetAlarmFullState",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "domain",
-                        "in": "query",
-                        "description": "Alarm domain name",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "Alarm name",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/AlarmFullState"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read the full current status of alarms",
-                "operationId": "PublicApi_PostGetAlarmFullState",
-                "consumes": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml",
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "aAlarmIdList",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/AlarmId"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/AlarmFullState"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/alarm/archive": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read historical values of alarms ​​from the alarm SQL archive",
-                "operationId": "PublicApi_GetAlarmArchiveSequence",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "domain",
-                        "in": "query",
-                        "description": "Alarm domain name",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "periodStart",
-                        "in": "query",
-                        "description": "The beginning of the period from which the data is read. The date should be given in ISO 8601 or local server time format.",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "periodLength",
-                        "in": "query",
-                        "description": "The length of the period from which the data is read. The length should be given in .NET time format, e.g. 8:00:00.",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "group",
-                        "in": "query",
-                        "description": "Name of a alarm group",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    },
-                    {
-                        "name": "priority",
-                        "in": "query",
-                        "description": "Alarm priority name. Available values: Critical, Urgent, Alert, Warning, Message",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    },
-                    {
-                        "name": "type",
-                        "in": "query",
-                        "description": "Alarm type name. Available values: Common, Notification, Begins, Ends, Acknowledged, Unacknowledged",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    },
-                    {
-                        "name": "filter",
-                        "in": "query",
-                        "description": "Alarm name mask. The mask may contain ambiguous characters: '*' - replacing any number of any characters and '?' - replacing any one character",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "filterByDescription",
-                        "in": "query",
-                        "description": "If the parameter is true, then the filter parameter is used for filtering by description of the alarm instead of the alarm name",
-                        "required": false,
-                        "type": "boolean"
-                    },
-                    {
-                        "name": "offset",
-                        "in": "query",
-                        "description": "The number of the first alarm from the found alarms to be returned. Default value is 0.",
-                        "required": false,
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    {
-                        "name": "limit",
-                        "in": "query",
-                        "description": "The maximum number of alarms that can be returned. The default value is 1000.",
-                        "required": false,
-                        "type": "integer",
-                        "format": "int32"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/HistoricalAlarmsReadResult"
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/alarm/events": {
-            "get": {
-                "tags": [
-                    "PublicApi"
-                ],
-                "summary": "Read historical events from the alarm SQL archive",
-                "operationId": "PublicApi_GetAlarmArchiveEvent",
-                "consumes": [],
-                "produces": [
-                    "application/json",
-                    "text/json",
-                    "text/html",
-                    "application/xml",
-                    "text/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "domain",
-                        "in": "query",
-                        "description": "Alarm domain name",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "periodStart",
-                        "in": "query",
-                        "description": "The beginning of the period from which the data is read. The date should be given in ISO 8601 or local server time format.",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "periodLength",
-                        "in": "query",
-                        "description": "The length of the period from which the data is read. The length should be given in .NET time format, e.g. 8:00:00.",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "group",
-                        "in": "query",
-                        "description": "Name of a alarm group",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    },
-                    {
-                        "name": "priority",
-                        "in": "query",
-                        "description": "Alarm priority name. Available values: Critical, Urgent, Alert, Warning, Message",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    },
-                    {
-                        "name": "type",
-                        "in": "query",
-                        "description": "Alarm type name. Available values: Common, Notification, Begins, Ends, Acknowledged, Unacknowledged",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    },
-                    {
-                        "name": "filter",
-                        "in": "query",
-                        "description": "Alarm name mask. The mask may contain ambiguous characters: '*' - replacing any number of any characters and '?' - replacing any one character",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "filterByDescription",
-                        "in": "query",
-                        "description": "If the parameter is true, then the filter parameter is used for filtering after description of the alarm instead of the alarm name",
-                        "required": false,
-                        "type": "boolean"
-                    },
-                    {
-                        "name": "offset",
-                        "in": "query",
-                        "description": "The number of the first event from the found evetns to be returned. Default value is 0.",
-                        "required": false,
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    {
-                        "name": "limit",
-                        "in": "query",
-                        "description": "The maximum number of events that can be returned. The default value is 1000.",
-                        "required": false,
-                        "type": "integer",
-                        "format": "int32"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/HistoricalEventsReadResult"
-                        }
-                    },
-                    "400": {
-                        "description": "BadRequest",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorMessage"
-                        }
-                    }
-                }
-            }
+          }
         }
+      }
     },
-    "definitions": {
-        "PublicServerInfo": {
-            "type": "object",
-            "properties": {
-                "asixEvoVersion": {
-                    "type": "string"
-                },
-                "programVersion": {
-                    "type": "string"
-                }
+    "/v1/server/variable/aggregate": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read names of available aggregate functions",
+        "operationId": "PublicApi_GetServerAggregateNames",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AggregateDesc"
+              }
             }
-        },
-        "AggregateDesc": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                }
-            }
-        },
-        "ErrorMessage": {
-            "required": [
-                "Message"
-            ],
-            "type": "object",
-            "properties": {
-                "Message": {
-                    "type": "string"
-                }
-            }
-        },
-        "PostGetVariableAttributeParams": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "attribute": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "VariableValue": {
-            "required": [
-                "id",
-                "readSucceeded",
-                "timeStamp",
-                "quality",
-                "value"
-            ],
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "readSucceeded": {
-                    "type": "boolean"
-                },
-                "readStatusString": {
-                    "type": "string"
-                },
-                "timeStamp": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "quality": {
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "value": {
-                    "type": "object"
-                }
-            }
-        },
-        "AggregateRange": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "aggregate": {
-                    "type": "string"
-                },
-                "periodStart": {
-                    "type": "string"
-                },
-                "periodEnd": {
-                    "type": "string"
-                },
-                "periodLength": {
-                    "type": "string"
-                },
-                "refreshInterval": {
-                    "type": "string"
-                }
-            }
-        },
-        "ReadRawResult": {
-            "required": [
-                "id",
-                "readSucceeded",
-                "moreDataAvailable",
-                "periodStartTime",
-                "periodEndTime",
-                "samples"
-            ],
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "readSucceeded": {
-                    "type": "boolean"
-                },
-                "readStatusString": {
-                    "type": "string"
-                },
-                "moreDataAvailable": {
-                    "type": "boolean"
-                },
-                "periodStartTime": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "periodEndTime": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "samples": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/RawSample"
-                    }
-                }
-            }
-        },
-        "RawSample": {
-            "required": [
-                "t",
-                "q",
-                "v"
-            ],
-            "type": "object",
-            "properties": {
-                "t": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "q": {
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "v": {
-                    "format": "double",
-                    "type": "number"
-                }
-            }
-        },
-        "ReadProcessedResult": {
-            "required": [
-                "id",
-                "readSucceeded",
-                "periodStartTime",
-                "periodEndTime",
-                "samples"
-            ],
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "readSucceeded": {
-                    "type": "boolean"
-                },
-                "readStatusString": {
-                    "type": "string"
-                },
-                "periodStartTime": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "periodEndTime": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "samples": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/ProcessedSample"
-                    }
-                }
-            }
-        },
-        "ProcessedSample": {
-            "required": [
-                "t",
-                "e",
-                "q",
-                "v"
-            ],
-            "type": "object",
-            "properties": {
-                "t": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "e": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "q": {
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "v": {
-                    "format": "double",
-                    "type": "number"
-                }
-            }
-        },
-        "AlarmState": {
-            "required": [
-                "id",
-                "readSucceeded",
-                "active",
-                "ackAvailabe",
-                "ack"
-            ],
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "readSucceeded": {
-                    "type": "boolean"
-                },
-                "readStatusString": {
-                    "type": "string"
-                },
-                "active": {
-                    "type": "boolean"
-                },
-                "stateDescription": {
-                    "type": "string"
-                },
-                "ackAvailabe": {
-                    "type": "boolean"
-                },
-                "ack": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "AlarmId": {
-            "type": "object",
-            "properties": {
-                "domain": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "AlarmFullState": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "readSucceeded": {
-                    "type": "boolean"
-                },
-                "readStatusString": {
-                    "type": "string"
-                },
-                "active": {
-                    "type": "boolean"
-                },
-                "stateDescription": {
-                    "type": "string"
-                },
-                "ack": {
-                    "type": "boolean"
-                },
-                "ackTime": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "ackUser": {
-                    "type": "string"
-                },
-                "ackStation": {
-                    "type": "string"
-                },
-                "ackNote": {
-                    "type": "string"
-                },
-                "lastActiveStateBegin": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "lastActiveStateEnd": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "lastActiveStateDetectionBegin": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "lastActiveStateDetectionEnd": {
-                    "format": "date-time",
-                    "type": "string"
-                }
-            }
-        },
-        "HistoricalAlarmsReadResult": {
-            "required": [
-                "readSucceeded",
-                "moreDataAvailable",
-                "alarms"
-            ],
-            "type": "object",
-            "properties": {
-                "readSucceeded": {
-                    "type": "boolean"
-                },
-                "readStatusString": {
-                    "type": "string"
-                },
-                "moreDataAvailable": {
-                    "type": "boolean"
-                },
-                "alarms": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/HistoricalAlarm"
-                    }
-                }
-            }
-        },
-        "HistoricalAlarm": {
-            "required": [
-                "name",
-                "description",
-                "priority",
-                "startOnly",
-                "startTime",
-                "startDetectTime",
-                "ackUser",
-                "ackStation",
-                "ackNote"
-            ],
-            "type": "object",
-            "properties": {
-                "endTime": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "endDetectTime": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "ack": {
-                    "type": "boolean"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "priority": {
-                    "type": "string"
-                },
-                "startOnly": {
-                    "type": "boolean"
-                },
-                "startTime": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "startDetectTime": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "ackTime": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "ackUser": {
-                    "type": "string"
-                },
-                "ackStation": {
-                    "type": "string"
-                },
-                "ackNote": {
-                    "type": "string"
-                }
-            }
-        },
-        "HistoricalEventsReadResult": {
-            "required": [
-                "moreDataAvailable"
-            ],
-            "type": "object",
-            "properties": {
-                "readSucceeded": {
-                    "type": "boolean"
-                },
-                "readStatusString": {
-                    "type": "string"
-                },
-                "events": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/HistoricalEvent"
-                    }
-                },
-                "moreDataAvailable": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "HistoricalEvent": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "priority": {
-                    "type": "string"
-                },
-                "startOnly": {
-                    "type": "boolean"
-                },
-                "eventFinished": {
-                    "type": "boolean"
-                },
-                "eventTime": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "eventDetectTime": {
-                    "format": "date-time",
-                    "type": "string"
-                }
-            }
+          }
         }
+      }
+    },
+    "/v1/server/variable/attribute": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read names of available variable attributes",
+        "operationId": "PublicApi_GetServerAttributeNames",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/server/alarm/domain": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read names of available alarm domains",
+        "operationId": "PublicApi_GetServerAlarmDomainNames",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/variable/attribute": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read values of variables attributes",
+        "description": "If variable name is incorrect then the null value is returned instead of the subarray.\r\nIf attribute name is incorrect then the null value is returned instead of the text.",
+        "operationId": "PublicApi_GetVariableAttribute",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Variable name",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "attribute",
+            "in": "query",
+            "description": "Attribute name; e.g. Name, Description, Unit",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read values of variables attributes",
+        "operationId": "PublicApi_PostGetVariableAttribute",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "aParams",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PostGetVariableAttributeParams"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/variable/value": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read the current values ​​of variables",
+        "operationId": "PublicApi_GetVariableValue",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Variable name",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VariableValue"
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Write the current value of a variable",
+        "description": "Requires the use of https and basic authentication",
+        "operationId": "PublicApi_PutVariableValue",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "quality",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "timeStamp",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read the current values ​​of variables",
+        "operationId": "PublicApi_PostGetVariableValue",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "aNames",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VariableValue"
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/variable/aggregate": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read the current value of a variable aggregate",
+        "description": "You should give either periodLength or periodStart and periodEnd.",
+        "operationId": "PublicApi_GetVariableAggregate",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Variable name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aggregate",
+            "in": "query",
+            "description": "Aggregate name; e.g. Start, Average, SumUp.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodLength",
+            "in": "query",
+            "description": "The length of the period for which the aggregate is calculated. The length should be given in OPC time format, e.g. 1H.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodStart",
+            "in": "query",
+            "description": "The beginning of the period for which the aggregate is calculated. The date should be given in OPC format, e.g. DAY-1D",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodEnd",
+            "in": "query",
+            "description": "The end of the period for which the aggregate is calculated. The date should be given in OPC format, e.g. DAY",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "refreshInterval",
+            "in": "query",
+            "description": "The length of the aggregate calculation period. The length should be given in the OPC time format. e.g. 5M",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VariableValue"
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read the current values of variables aggregates",
+        "operationId": "PublicApi_PostGetVariableAggregate",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "aAggregateRangeList",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AggregateRange"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VariableValue"
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/variable/archive/raw": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read raw historical values ​​of a variable",
+        "operationId": "PublicApi_GetVariableArchiveRaw",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Variable name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodStart",
+            "in": "query",
+            "description": "The beginning of the period from which the data is read. The date should be given in OPC or ISO 8601 format.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodLength",
+            "in": "query",
+            "description": "The length of the period from which the data is read. The length should be given in OPC time format, e.g. 1D.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "archiveType",
+            "in": "query",
+            "description": "Optional parameter specifying the type of archive from which the archival values should be read, e.g. D, H, B.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "leftBound",
+            "in": "query",
+            "description": "Optional parameter determining whether to return the left limit. The default value is true.",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "rightBound",
+            "in": "query",
+            "description": "Optional parameter determining whether to return the right limit. The default value is true.",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "maxNumberOfSamples",
+            "in": "query",
+            "description": "An optional parameter determining how many samples can be returned.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ReadRawResult"
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/variable/archive/processed": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read aggregated historical values ​​of a variable",
+        "operationId": "PublicApi_GetVariableArchiveProcessed",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Variable name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aggregate",
+            "in": "query",
+            "description": "Aggregate name; e.g. Start, Average, SumUp.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodStart",
+            "in": "query",
+            "description": "The beginning of the period from which the data is read. The date should be given in OPC or ISO 8601 format.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodLength",
+            "in": "query",
+            "description": "The length of the period from which the data is read. The length should be given in OPC time format, e.g. 1D.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "resampleInterval",
+            "in": "query",
+            "description": "The length of the aggregate interval. The length should be given in OPC format e.g. 1H",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "archiveType",
+            "in": "query",
+            "description": "Optional parameter specifying the type of archive from which the archival values should be read, e.g. D, H, B.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ReadProcessedResult"
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/alarm/state": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read the current status of alarms",
+        "operationId": "PublicApi_GetAlarmsState",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "query",
+            "description": "Alarm domain name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Alarm name",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AlarmState"
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read the current status of alarms",
+        "operationId": "PublicApi_PostGetAlarmsState",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "aAlarmIdList",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AlarmId"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AlarmState"
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/alarm/full-state": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read the full current status of alarms",
+        "operationId": "PublicApi_GetAlarmFullState",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "query",
+            "description": "Alarm domain name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Alarm name",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AlarmFullState"
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read the full current status of alarms",
+        "operationId": "PublicApi_PostGetAlarmFullState",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "aAlarmIdList",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AlarmId"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AlarmFullState"
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/alarm/archive": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read historical values of alarms ​​from the alarm SQL archive",
+        "operationId": "PublicApi_GetAlarmArchive",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "query",
+            "description": "Alarm domain name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodStart",
+            "in": "query",
+            "description": "The beginning of the period from which the data is read. The date should be given in ISO 8601 or local server time format.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodLength",
+            "in": "query",
+            "description": "The length of the period from which the data is read. The length should be given in .NET time format, e.g. 8:00:00.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "description": "Name of a alarm group",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "priority",
+            "in": "query",
+            "description": "Alarm priority name. Available values: Critical, Urgent, Alert, Warning, Message",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Alarm type name. Available values: Common, Notification, Begins, Ends, Acknowledged, Unacknowledged",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Alarm name mask. The mask may contain ambiguous characters: '*' - replacing any number of any characters and '?' - replacing any one character",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filterByDescription",
+            "in": "query",
+            "description": "If the parameter is true, then the filter parameter is used for filtering by description of the alarm instead of the alarm name",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "The number of the first alarm from the found alarms to be returned. Default value is 0.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of alarms that can be returned. The default value is 1000.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/HistoricalAlarmsReadResult"
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/alarm/events": {
+      "get": {
+        "tags": [
+          "PublicApi"
+        ],
+        "summary": "Read historical events from the alarm SQL archive",
+        "operationId": "PublicApi_GetAlarmArchiveEvent",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "text/html",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "query",
+            "description": "Alarm domain name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodStart",
+            "in": "query",
+            "description": "The beginning of the period from which the data is read. The date should be given in ISO 8601 or local server time format.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodLength",
+            "in": "query",
+            "description": "The length of the period from which the data is read. The length should be given in .NET time format, e.g. 8:00:00.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "description": "Name of a alarm group",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "priority",
+            "in": "query",
+            "description": "Alarm priority name. Available values: Critical, Urgent, Alert, Warning, Message",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Alarm type name. Available values: Common, Notification, Begins, Ends, Acknowledged, Unacknowledged",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Alarm name mask. The mask may contain ambiguous characters: '*' - replacing any number of any characters and '?' - replacing any one character",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filterByDescription",
+            "in": "query",
+            "description": "If the parameter is true, then the filter parameter is used for filtering after description of the alarm instead of the alarm name",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "The number of the first event from the found evetns to be returned. Default value is 0.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of events that can be returned. The default value is 1000.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/HistoricalEventsReadResult"
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
     }
+  },
+  "definitions": {
+    "PublicServerInfo": {
+      "type": "object",
+      "properties": {
+        "asixEvoVersion": {
+          "type": "string"
+        },
+        "programVersion": {
+          "type": "string"
+        }
+      }
+    },
+    "AggregateDesc": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "ErrorMessage": {
+      "required": [
+        "Message"
+      ],
+      "type": "object",
+      "properties": {
+        "Message": {
+          "type": "string"
+        }
+      }
+    },
+    "PostGetVariableAttributeParams": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "attribute": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "VariableValue": {
+      "required": [
+        "id",
+        "readSucceeded",
+        "timeStamp",
+        "quality",
+        "value"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "readSucceeded": {
+          "type": "boolean"
+        },
+        "readStatusString": {
+          "type": "string"
+        },
+        "timeStamp": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "quality": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "value": {
+          "type": "object"
+        }
+      }
+    },
+    "AggregateRange": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "aggregate": {
+          "type": "string"
+        },
+        "periodStart": {
+          "type": "string"
+        },
+        "periodEnd": {
+          "type": "string"
+        },
+        "periodLength": {
+          "type": "string"
+        },
+        "refreshInterval": {
+          "type": "string"
+        }
+      }
+    },
+    "ReadRawResult": {
+      "required": [
+        "id",
+        "readSucceeded",
+        "moreDataAvailable",
+        "periodStartTime",
+        "periodEndTime",
+        "samples"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "readSucceeded": {
+          "type": "boolean"
+        },
+        "readStatusString": {
+          "type": "string"
+        },
+        "moreDataAvailable": {
+          "type": "boolean"
+        },
+        "periodStartTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "periodEndTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "samples": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RawSample"
+          }
+        }
+      }
+    },
+    "RawSample": {
+      "required": [
+        "t",
+        "q",
+        "v"
+      ],
+      "type": "object",
+      "properties": {
+        "t": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "q": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "v": {
+          "format": "double",
+          "type": "number"
+        }
+      }
+    },
+    "ReadProcessedResult": {
+      "required": [
+        "id",
+        "readSucceeded",
+        "periodStartTime",
+        "periodEndTime",
+        "samples"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "readSucceeded": {
+          "type": "boolean"
+        },
+        "readStatusString": {
+          "type": "string"
+        },
+        "periodStartTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "periodEndTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "samples": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProcessedSample"
+          }
+        }
+      }
+    },
+    "ProcessedSample": {
+      "required": [
+        "t",
+        "e",
+        "q",
+        "v"
+      ],
+      "type": "object",
+      "properties": {
+        "t": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "e": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "q": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "v": {
+          "format": "double",
+          "type": "number"
+        }
+      }
+    },
+    "AlarmState": {
+      "required": [
+        "id",
+        "readSucceeded",
+        "active",
+        "ackAvailabe",
+        "ack"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "readSucceeded": {
+          "type": "boolean"
+        },
+        "readStatusString": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "stateDescription": {
+          "type": "string"
+        },
+        "ackAvailabe": {
+          "type": "boolean"
+        },
+        "ack": {
+          "type": "boolean"
+        }
+      }
+    },
+    "AlarmId": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "AlarmFullState": {
+      "required": [
+        "id",
+        "readSucceeded",
+        "active",
+        "ack"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "readSucceeded": {
+          "type": "boolean"
+        },
+        "readStatusString": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "stateDescription": {
+          "type": "string"
+        },
+        "ack": {
+          "type": "boolean"
+        },
+        "ackTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "ackUser": {
+          "type": "string"
+        },
+        "ackStation": {
+          "type": "string"
+        },
+        "ackNote": {
+          "type": "string"
+        },
+        "lastActiveStateBegin": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "lastActiveStateEnd": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "lastActiveStateDetectionBegin": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "lastActiveStateDetectionEnd": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "HistoricalAlarmsReadResult": {
+      "required": [
+        "readSucceeded",
+        "moreDataAvailable",
+        "alarms"
+      ],
+      "type": "object",
+      "properties": {
+        "readSucceeded": {
+          "type": "boolean"
+        },
+        "readStatusString": {
+          "type": "string"
+        },
+        "moreDataAvailable": {
+          "type": "boolean"
+        },
+        "alarms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HistoricalAlarm"
+          }
+        }
+      }
+    },
+    "HistoricalAlarm": {
+      "required": [
+        "name",
+        "description",
+        "priority",
+        "startOnly",
+        "startTime",
+        "startDetectTime"
+      ],
+      "type": "object",
+      "properties": {
+        "endTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "endDetectTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "ack": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "startOnly": {
+          "type": "boolean"
+        },
+        "startTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "startDetectTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "ackTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "ackUser": {
+          "type": "string"
+        },
+        "ackStation": {
+          "type": "string"
+        },
+        "ackNote": {
+          "type": "string"
+        }
+      }
+    },
+    "HistoricalEventsReadResult": {
+      "required": [
+        "readSucceeded",
+        "moreDataAvailable",
+        "events"
+      ],
+      "type": "object",
+      "properties": {
+        "readSucceeded": {
+          "type": "boolean"
+        },
+        "readStatusString": {
+          "type": "string"
+        },
+        "moreDataAvailable": {
+          "type": "boolean"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HistoricalEvent"
+          }
+        }
+      }
+    },
+    "HistoricalEvent": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "startOnly": {
+          "type": "boolean"
+        },
+        "eventFinished": {
+          "type": "boolean"
+        },
+        "eventTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "eventDetectTime": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    }
+  }
 }
-
-

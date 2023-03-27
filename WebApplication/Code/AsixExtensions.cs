@@ -8,8 +8,8 @@ namespace Asix;
 public partial class AsixRestClient
 {
     public readonly static string AlarmDomainName = "Fabryka_EVO";
-    public readonly static string RestServerUrl = "http://fab2/asix";
-    public readonly static string RestServerUrlHttps = "https://fab2/asix";
+    public readonly static string RestServerUrl = "http://asport.askom.pl/asix";
+    public readonly static string RestServerUrlHttps = "https://asport.askom.pl/asix";
 
     public static AsixRestClient Create()
     {

@@ -51,7 +51,7 @@ namespace WebApplication.Pages.Alarm
         async Task ReadData()
         {
             AsixRestClient asixRestClient = AsixRestClient.Create();
-            mHistAlarmArchive = await asixRestClient.GetAlarmArchiveSequenceAsync(
+            mHistAlarmArchive = await asixRestClient.GetAlarmArchiveAsync(
                 AsixRestClient.AlarmDomainName, DateReadTime.ToString("o"), TimeSpan.Parse(PeriodLength).ToString(),
                 Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>(), null, null, null, null);
         }

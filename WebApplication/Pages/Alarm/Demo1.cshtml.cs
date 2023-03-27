@@ -35,13 +35,13 @@ namespace WebApplication.Pages.Alarm
         /// </summary>
         public Demo1Model()
         {
-            mAlarmModelList.Add(new AlarmModel("Alarm nr 011"));
-            mAlarmModelList.Add(new AlarmModel("Alarm nr 083"));
-            mAlarmModelList.Add(new AlarmModel("Alarm nr 098"));
+            mAlarmModelList.Add(new AlarmModel("Alarm nr 105"));
+            mAlarmModelList.Add(new AlarmModel("Alarm nr 106"));
+            mAlarmModelList.Add(new AlarmModel("Alarm nr 107"));
             mAlarmModelList.Add(new AlarmModel("Alarm nr 109"));
             mAlarmModelList.Add(new AlarmModel("Alarm nr 155"));
             mAlarmModelList.Add(new AlarmModel("Alarm nr 202"));
-            mAlarmModelList.Add(new AlarmModel("Alarm nr 227"));
+            mAlarmModelList.Add(new AlarmModel("Alarm nr 213"));
             mAlarmModelList.Add(new AlarmModel("Alarm_AAA"));     // nieistniejąca nazwa alarmu, demonstruje obsługę błędu odczytu alarmu
         }
 
