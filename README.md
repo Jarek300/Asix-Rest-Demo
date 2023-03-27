@@ -7,7 +7,7 @@ Projektanci często stają przed zadaniem stworzenia dla użytkownika programu, 
 
 Działanie programu - klienta REST - sprowadza się do wywołania odpowiedniej usługi serwera REST, odebrania odpowiedzi i wyświetlenia  danych zawartych w odpowiedzi. Obecnie praktycznie wszystkie języki programowania i wszystkie platformy tworzenia aplikacji mają wbudowane mechanizmy wywoływania usług serwerów REST. 
 
-Aplikacja **Asix-AspNetMvcCore-Demo** jest napisana w języku C# i działa na platformie .NET Core. Do tworzenia stron WWW użyta została biblioteka [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.2). Strony WWW działają zgodnie z modelem [Razor Pages](https://docs.microsoft.com/en-us/aspnet/core/razor-pages/?view=aspnetcore-2.2&tabs=visual-studio). Do formatowanie elementów stron używana jest bilioteka [Bootstrap](https://getbootstrap.com/).
+Aplikacja **Asix-AspNetMvcCore-Demo** jest napisana w języku C# i działa na platformie .NET 6. Do tworzenia stron WWW użyta została biblioteka [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/getting-started/?view=aspnetcore-6.0). Strony WWW działają zgodnie z modelem [Razor Pages](https://learn.microsoft.com/en-us/aspnet/core/razor-pages/?view=aspnetcore-6.0). Do formatowanie elementów stron używana jest bilioteka [Bootstrap](https://getbootstrap.com/).
 
 # Zawartość aplikacji
  * [Attribute/Demo1](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Attribute) - odczyt wybranych atrybutów zmiennej
@@ -15,6 +15,7 @@ Aplikacja **Asix-AspNetMvcCore-Demo** jest napisana w języku C# i działa na pl
  * [Variable/Demo1](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Variable) - odczyt wartości bieżącej jednej zmiennej
  * [Variable/Demo2](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Variable) - odczyt wartości bieżącej wielu zmiennych
  * [Variable/Demo3](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Variable) - odczyt wartości bieżącej wielu zmiennych, sygnalizacja przekroczeń limitów, sygnalizacja trendu zmian wartości
+ * [Variable/Demo4](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Variable) - zapis wartości bieżącej zmiennej
  * [VariableDynamic/Demo1](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/VariableDynamic) - odświeżanie wartości bieżącej wielu zmiennych bez przeładowywania całej strony
  * [VariableDynamic/Demo2](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/VariableDynamic) - odświeżanie wartości bieżącej z użyciem ajax/json/jQuery
  * [Archiwum/Demo1](https://github.com/Jarek300/Asix-AspNetMvcCore-Demo/tree/master/WebApplication/Pages/Archive) - odczyt wartości historycznych agregowanych dwu zmiennych i wyświetlenie w postaci tabeli
@@ -26,7 +27,7 @@ Aplikacja **Asix-AspNetMvcCore-Demo** jest napisana w języku C# i działa na pl
 Działająca aplikacja jest dostępna pod adresem [https://asixrestdemo.azurewebsites.net](https://asixrestdemo.azurewebsites.net)
 
 # Wymagania
-Aby móc skompilować projekt należy zainstalować [Visual Studio 2017](https://visualstudio.microsoft.com/pl/downloads) oraz [.NET Core 2.2 SDK](https://dotnet.microsoft.com/download).
+Aby móc skompilować projekt należy zainstalować [Visual Studio 2022](https://visualstudio.microsoft.com/pl/downloads) oraz [.NET 6 SDK](https://dotnet.microsoft.com/download).
 
 # Description
 The Asix-AspNetMvcCore-Demo programm contains examples of reading process data from the REST server of Asix.Evo application and presenting them on Web pages.
