@@ -1,0 +1,23 @@
+﻿@using WebApplication.Code;
+
+<div id="@Model.Name" class="card shadow-sm" style="width: 12rem;">
+    @if (!string.IsNullOrEmpty(Model.ReadError))
+    {
+        <div class="card-header bg-danger text-white"><h5>Błąd odczytu</h5> @Model.ReadError</div>
+    }
+
+    <div class="card-body">
+        <p>@Model.Decription</p>
+        <h3>@Model.ValueFormatted @Model.Unit</h3>
+    </div>
+
+    <div class="card-footer py-0 text-right">
+        <small class="text-muted">@Model.Name, @Model.DateTime.ToString()</small>
+    </div>
+</div>
+
+
+@code {
+    [Parameter, EditorRequired]
+    public required VariableModel Model { get; set; }
+}
