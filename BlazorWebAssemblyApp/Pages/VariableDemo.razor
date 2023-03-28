@@ -41,20 +41,23 @@
 
     private System.Timers.Timer mTimer = new(5000);
 
+    List<string> mAttributeNameList = new List<string> { "Description", "Unit" };
+
 
     protected override void OnInitialized()
     {
-        mVariableModelList.Add(new VariableModel("A000", "Temperatura spalin przed odemglaczem", "°C"));
-        mVariableModelList.Add(new VariableModel("A004", "Temperatura kwasu siarkowego", "°C"));
-        mVariableModelList.Add(new VariableModel("A008", "Temperatura wody ciepłej", "°C"));
-        mVariableModelList.Add(new VariableModel("A082", "Przepływ kwasu siarkowego", "m³/h"));
-        mVariableModelList.Add(new VariableModel("A084", "Poziom w zb. cyrkulacyjnym kwasu", "%"));
-        mVariableModelList.Add(new VariableModel("A086", "Przepływ wody chłodzącej", "m³/h"));
+        mVariableModelList.Add(new VariableModel("A000"));
+        mVariableModelList.Add(new VariableModel("A004"));
+        mVariableModelList.Add(new VariableModel("A008"));
+        mVariableModelList.Add(new VariableModel("A082"));
+        mVariableModelList.Add(new VariableModel("A084"));
+        mVariableModelList.Add(new VariableModel("A086"));
     }
 
 
     protected override async Task OnParametersSetAsync()
     {
+        await ReadAttributesAsync();
         await RefreshPageAsync();
 
         mTimer.Elapsed += async (sender, e) => await RefreshPageAsync();
@@ -67,6 +70,21 @@
     {
         mTimer.Dispose();
     }
+
+
+    async Task ReadAttributesAsync()
+    {
+        AsixRestClient asixRestClient = AsixRestClient.Create();
+        var variableNames = mVariableModelList.Select(x => x.Name).ToArray();
+        IList<IList<string>> variableAttributesCollection = await asixRestClient.GetVariableAttributeAsync(variableNames, mAttributeNameList);
+
+        for (int i = 0; i < mVariableModelList.Count; i++)
+        {
+            mVariableModelList[i].Decription = variableAttributesCollection[i][0];
+            mVariableModelList[i].Unit = variableAttributesCollection[i][1];
+        }
+    }
+
 
 
     async Task RefreshPageAsync()

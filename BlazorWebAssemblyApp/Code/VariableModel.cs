@@ -13,8 +13,8 @@ namespace WebApplication.Code
         ///  Atrybuty zmiennej
         /// </summary>
         public string Name { get; set; }
-        public string Decription { get; set; }
-        public string Unit { get; set; }
+        public string Decription { get; set; } = "";
+        public string Unit { get; set; } = "";
 
         /// <summary>
         /// Ewentualny błąd odczytu wartości zmiennej
@@ -23,21 +23,19 @@ namespace WebApplication.Code
 
 
         /// <summary>
-        /// Sformatowaną wartość zmiennej
+        /// Sformatowana wartość zmiennej
         /// </summary>
         public string ValueFormatted { get; set; } = "?";
 
         /// <summary>
-        /// Stemple czasu wartości zmiennej
+        /// Stempel czasu wartości zmiennej
         /// </summary>
         public DateTime DateTime { get; set; }
 
 
-        public VariableModel(string aName, string aDecription, string aUnit)
+        public VariableModel(string aName)
         {
             Name = aName;
-            Decription = aDecription;
-            Unit = aUnit;
         }
 
 

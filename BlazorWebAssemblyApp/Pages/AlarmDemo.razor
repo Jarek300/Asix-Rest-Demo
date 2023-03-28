@@ -1,6 +1,7 @@
-﻿@page "/AlamrDemo"
+﻿@page "/AlarmDemo"
 
 @using Asix;
+@using BlazorWebAssemblyApp.Code;
 @using WebApplication.Code;
 
 @implements IDisposable
@@ -22,16 +23,35 @@
 
 
 <div class="container">
+
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+
+        @foreach (var i in mAlarmModelList)
+        {
+            <div class="col mb-3">
+                <AlarmCard Model="@i"></AlarmCard>
+            </div>
+        }
+
     </div>
 </div>
 
 
 @code {
-    private System.Timers.Timer mTimer = new(5000);
+    System.Timers.Timer mTimer = new(5000);
+
+    List<AlarmModel> mAlarmModelList = new();
 
     protected override void OnInitialized()
     {
+        mAlarmModelList.Add(new AlarmModel("Alarm nr 105"));
+        mAlarmModelList.Add(new AlarmModel("Alarm nr 106"));
+        mAlarmModelList.Add(new AlarmModel("Alarm nr 107"));
+        mAlarmModelList.Add(new AlarmModel("Alarm nr 109"));
+        mAlarmModelList.Add(new AlarmModel("Alarm nr 155"));
+        mAlarmModelList.Add(new AlarmModel("Alarm nr 202"));
+        mAlarmModelList.Add(new AlarmModel("Alarm nr 213"));
+        mAlarmModelList.Add(new AlarmModel("Alarm_AAA"));     // nieistniejąca nazwa alarmu, demonstruje obsługę błędu odczytu alarmu
     }
 
 
@@ -53,6 +73,27 @@
 
     async Task RefreshPageAsync()
     {
+        await ReadAlarms();
         await InvokeAsync(StateHasChanged);
     }
+
+
+    async Task ReadAlarms()
+    {
+        AsixRestClient asixRestClient = AsixRestClient.Create();
+
+        IEnumerable<string> alarmNames = mAlarmModelList.Select(x => x.Name);
+        ICollection<AlarmState> alarmStates = await asixRestClient.GetAlarmsStateAsync(AsixRestClient.AlarmDomainName, alarmNames);
+        AlarmState[] alarmStatesArray = alarmStates.ToArray();
+
+        for (int i = 0; i < mAlarmModelList.Count; i++)
+        {
+            AlarmModel alarmModel = mAlarmModelList[i];
+            AlarmState alarmState = alarmStatesArray[i];
+            alarmModel.AlarmState = alarmState;
+
+            //alarmModel.AlarmState.Active = Random.Shared.Next() % 2 == 0; // testy
+        }
+    }
+
 }
